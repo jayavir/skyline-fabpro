@@ -74,35 +74,46 @@
 
     /* Letterhead Styling */
     .letterhead {
-      background: #fff; border: 2px solid #0f172a; padding: 22px; border-radius: 8px; color: #000;
+      background: #fff; border: 2px solid #0f172a; padding: 20px; border-radius: 8px; color: #000;
     }
     .lh-header {
       display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 3px solid #b45309; padding-bottom: 10px; margin-bottom: 12px;
+      border-bottom: 3px solid #b45309; padding-bottom: 8px; margin-bottom: 10px;
     }
-    .lh-title h2 { margin: 0; color: #0f172a; font-size: 22px; }
-    .lh-title p { margin: 3px 0 0; font-size: 11px; color: #334155; font-weight: 600; }
-    .lh-contact { text-align: right; font-size: 12px; line-height: 1.5; color: #0f172a; }
+    .lh-title h2 { margin: 0; color: #0f172a; font-size: 21px; }
+    .lh-title p { margin: 2px 0 0; font-size: 11px; color: #334155; font-weight: 600; }
+    .lh-contact { text-align: right; font-size: 11.5px; line-height: 1.45; color: #0f172a; }
     .lh-badge {
-      background: #0f172a; color: #fbbf24; text-align: center; padding: 5px;
-      font-weight: 700; font-size: 13px; letter-spacing: 1px; margin-bottom: 12px;
+      background: #0f172a; color: #fbbf24; text-align: center; padding: 4px;
+      font-weight: 700; font-size: 12.5px; letter-spacing: 1px; margin-bottom: 10px;
     }
     .lh-meta {
-      display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 12px;
-      background: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;
+      display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px;
+      background: #f8fafc; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px;
     }
-    table.q-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 12.5px; }
-    table.q-table th, table.q-table td { border: 1px solid #94a3b8; padding: 7px 9px; text-align: left; }
+    table.q-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 12px; }
+    table.q-table th, table.q-table td { border: 1px solid #94a3b8; padding: 6px 8px; text-align: left; }
     table.q-table th { background: #0f172a; color: #fff; }
     .spec-box {
-      background: #fffbeb; border: 1px solid #f59e0b; padding: 11px; border-radius: 6px; margin-bottom: 12px;
+      background: #fffbeb; border: 1px solid #f59e0b; padding: 9px 11px; border-radius: 6px; margin-bottom: 10px;
     }
-    .spec-box h4 { margin: 0 0 6px; color: #92400e; font-size: 13.5px; }
-    .spec-box ul { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
-    .terms-box { font-size: 11.5px; line-height: 1.55; color: #334155; border-top: 1px dashed #94a3b8; padding-top: 8px; }
-    .lh-footer { display: flex; justify-content: space-between; margin-top: 24px; font-size: 12.5px; font-weight: 700; }
+    .spec-box h4 { margin: 0 0 5px; color: #92400e; font-size: 13px; }
+    .spec-box ul { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.5; }
+    
+    /* 2D Drawing Box inside Letterhead */
+    .lh-drawing-box {
+      border: 1px solid #94a3b8; border-radius: 6px; padding: 8px; margin-bottom: 10px;
+      text-align: center; background: #ffffff;
+    }
+    .lh-drawing-box h4 {
+      margin: 0 0 6px; font-size: 12.5px; color: #0f172a; background: #f1f5f9; padding: 4px; border-radius: 4px;
+    }
+    .lh-drawing-box img { max-width: 100%; max-height: 230px; height: auto; display: block; margin: 0 auto; }
 
-    canvas { width: 100%; max-width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; }
+    .terms-box { font-size: 11px; line-height: 1.5; color: #334155; border-top: 1px dashed #94a3b8; padding-top: 6px; }
+    .lh-footer { display: flex; justify-content: space-between; margin-top: 18px; font-size: 12px; font-weight: 700; }
+
+    canvas { width: 100%; max-width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; background: #ffffff; }
 
     @media print {
       body { background: #fff; }
@@ -112,7 +123,8 @@
       #tabQuotation { display: block !important; }
       .container { max-width: 100%; padding: 0; }
       .card { box-shadow: none; padding: 0; margin: 0; }
-      .letterhead { border: 2px solid #000; padding: 16px; }
+      .letterhead { border: 2px solid #000; padding: 14px; }
+      .lh-drawing-box img { max-height: 200px; }
     }
     @media (max-width: 600px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -200,7 +212,7 @@
           <div class="grid-3">
             <div>
               <label id="lblLen">લંબાઈ (L - Ft)</label>
-              <input type="number" id="lengthFt" value="20" min="1" oninput="autoSuggestSpecs()" />
+              <input type="number" id="lengthFt" value="15" min="1" oninput="autoSuggestSpecs()" />
             </div>
             <div>
               <label id="lblWid">પહોળાઈ (W - Ft)</label>
@@ -215,11 +227,11 @@
           <div class="grid-3">
             <div>
               <label id="lblSqft">કુલ Sq.Ft</label>
-              <input type="number" id="totalSqft" value="300" oninput="updateQuotation()" />
+              <input type="number" id="totalSqft" value="225" oninput="updateQuotation()" />
             </div>
             <div>
               <label id="lblRate">ભાવ (₹ / Sq.Ft)</label>
-              <input type="number" id="rateSqft" value="110" oninput="updateQuotation()" />
+              <input type="number" id="rateSqft" value="410" oninput="updateQuotation()" />
             </div>
             <div>
               <label>GST % / Advance %</label>
@@ -263,7 +275,13 @@
         <div class="card">
           <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
             <h3 style="margin:0;border:none;padding:0;" id="lblPreviewTitle">૪. ઓફિશિયલ લેટરહેડ PDF પ્રિવ્યુ</h3>
-            <button class="btn btn-success" style="width:auto;padding:9px 16px;" onclick="window.print()">📄 PDF ડાઉનલોડ / પ્રિન્ટ</button>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <label style="margin:0;display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;color:#0f172a;">
+                <input type="checkbox" id="include2DCheck" checked onchange="toggle2DInPDF()" style="width:auto;margin:0;" />
+                PDF માં 2D ડિઝાઈન રાખો
+              </label>
+              <button class="btn btn-success" style="width:auto;padding:9px 16px;" onclick="window.print()">📄 PDF ડાઉનલોડ / પ્રિન્ટ</button>
+            </div>
           </div>
 
           <div class="letterhead" id="letterheadArea">
@@ -308,12 +326,12 @@
                 <tr>
                   <td>1</td>
                   <td>
-                    <strong id="outWorkTitle">Industrial / Parking Shed</strong><br />
-                    <small id="outDimensions">સાઈઝ: 20 ફૂટ × 15 ફૂટ × 10 ફૂટ (H)</small>
+                    <strong id="outWorkTitle">Gazebo (નળિયાવાળો ગઝેબો)</strong><br />
+                    <small id="outDimensions">સાઈઝ: 15 ફૂટ (L) × 15 ફૂટ (W) × 10 ફૂટ (H)</small>
                   </td>
-                  <td id="outSqft">300</td>
-                  <td id="outRate">₹ 110</td>
-                  <td><strong id="outSubTotal">₹ 33,000</strong></td>
+                  <td id="outSqft">225</td>
+                  <td id="outRate">₹ 410</td>
+                  <td><strong id="outSubTotal">₹ 92,250</strong></td>
                 </tr>
                 <tr id="gstRow" style="display:none;">
                   <td colspan="4" style="text-align:right;"><strong>GST (18%):</strong></td>
@@ -321,7 +339,7 @@
                 </tr>
                 <tr>
                   <td colspan="4" style="text-align:right;background:#f1f5f9;"><strong>ગ્રાન્ડ ટોટલ (Grand Total):</strong></td>
-                  <td style="background:#f1f5f9;"><strong id="outGrandTotal" style="font-size:14px;">₹ 33,000</strong></td>
+                  <td style="background:#f1f5f9;"><strong id="outGrandTotal" style="font-size:14px;">₹ 92,250</strong></td>
                 </tr>
               </tbody>
             </table>
@@ -335,6 +353,12 @@
                 <li><strong>પર્લિન / આડા પાઈપ (Purlin):</strong> <span id="outPurlin"></span></li>
                 <li><strong>બેઝ પ્લેટ અને રૂફિંગ (Roofing &amp; Finish):</strong> <span id="outRoof"></span></li>
               </ul>
+            </div>
+
+            <!-- 2D STRUCTURE DESIGN INSIDE LETTERHEAD -->
+            <div class="lh-drawing-box" id="lhDrawingSection">
+              <h4 id="lhDrawingTitle">પ્રપોઝ્ડ 2D સ્ટ્રક્ચર ડિઝાઈન (Proposed 2D Structure Elevation &amp; Layout)</h4>
+              <img id="lhDrawingImg" alt="2D Structure Design" />
             </div>
 
             <div class="terms-box">
@@ -359,13 +383,42 @@
         </div>
       </div>
 
-      <!-- TAB 2: 2D STRUCTURE DESIGN -->
+      <!-- TAB 2: 2D STRUCTURE DESIGN CUSTOMIZER -->
       <div id="tab2D" class="tab-section" style="display:none;">
         <div class="card">
-          <h3>📐 2D Structure &amp; Column Layout Drawing</h3>
-          <p style="font-size:12.5px;color:#475569;margin-top:0;">તમારા નાખેલા માપ (L × W × H) મુજબ ઓટોમેટિક 2D એલિવેશન ડ્રોઈંગ:</p>
-          <canvas id="designCanvas" width="700" height="360"></canvas>
+          <h3>📐 2D Structure &amp; Gazebo Design Customizer</h3>
+          <div class="grid-3">
+            <div>
+              <label>ડિઝાઈન સ્ટાઈલ (Design Style)</label>
+              <select id="designStyle" onchange="draw2DDesign()">
+                <option value="gazebo_pyramid">Gazebo (પિરામિડ નળિયા/UPVC ડિઝાઈન)</option>
+                <option value="shed_gable">Full Shed (આખો શેડ - Front + 3D Length View)</option>
+                <option value="shed_slope">Single Slope Shed (એક ઢાળિયો શેડ)</option>
+              </select>
+            </div>
+            <div>
+              <label>રૂફ કલર (Roof Color)</label>
+              <select id="roofColor" onchange="draw2DDesign()">
+                <option value="#c2410c">Terracotta Naliya (નળિયા કલર)</option>
+                <option value="#1d4ed8">Royal Blue Sheet (બ્લુ પતરા)</option>
+                <option value="#991b1b">Brick Red Sheet (લાલ પતરા)</option>
+                <option value="#0f766e">Teal Green Sheet (ગ્રીન પતરા)</option>
+              </select>
+            </div>
+            <div>
+              <label>લંબાઈમાં કોલમની સંખ્યા (Column Bays)</label>
+              <select id="bayCount" onchange="draw2DDesign()">
+                <option value="3">3 Bays (4 થાંભલા લાઈનમાં)</option>
+                <option value="4" selected>4 Bays (5 થાંભલા લાઈનમાં)</option>
+                <option value="5">5 Bays (6 થાંભલા લાઈનમાં)</option>
+                <option value="6">6 Bays (7 થાંભલા લાઈનમાં)</option>
+              </select>
+            </div>
+          </div>
+
+          <canvas id="designCanvas" width="760" height="360"></canvas>
           <div style="margin-top:10px;font-size:13px;background:#f8fafc;padding:10px;border-radius:8px;border:1px solid #cbd5e1;" id="canvasSummary"></div>
+          <button class="btn btn-primary" style="margin-top:10px;" onclick="switchTab('tabQuotation', 'navQuote')">✅ આ ડિઝાઈન સાથે કોટેશન PDF જુઓ</button>
         </div>
       </div>
 
@@ -393,7 +446,6 @@
   </div>
 
   <script>
-    // Clear old service worker cache if present
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(regs => {
         for (let r of regs) r.unregister();
@@ -427,7 +479,12 @@
       document.querySelectorAll('.bottom-nav button').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).style.display = 'block';
       document.getElementById(navId).classList.add('active');
-      if (tabId === 'tab2D') draw2DDesign();
+      draw2DDesign();
+    }
+
+    function toggle2DInPDF() {
+      const checked = document.getElementById('include2DCheck').checked;
+      document.getElementById('lhDrawingSection').style.display = checked ? 'block' : 'none';
     }
 
     function setLang(lang) {
@@ -459,7 +516,6 @@
       const qNo = 'QT-' + Math.floor(101 + Math.random() * 899);
       document.getElementById('outQuoteNo').innerText = qNo;
       document.getElementById('badgeQuoteNo').innerText = qNo;
-      document.getElementById('workType').value = 'shed_ms';
       autoSuggestSpecs();
     }
 
@@ -473,7 +529,16 @@
       const sqft = Math.round(L * W);
       document.getElementById('totalSqft').value = sqft;
 
-      let rate = 110;
+      // Sync 2D Design Style & Color with Work Type
+      if (workType.startsWith('gazebo')) {
+        document.getElementById('designStyle').value = 'gazebo_pyramid';
+        document.getElementById('roofColor').value = (workType === 'gazebo_naliya') ? '#c2410c' : '#0f766e';
+      } else {
+        document.getElementById('designStyle').value = 'shed_gable';
+        document.getElementById('roofColor').value = '#1d4ed8';
+      }
+
+      let rate = 410;
       if (mode === 'with_material') {
         if (workType === 'gazebo_naliya') rate = 410;
         else if (workType === 'gazebo_upvc') rate = 380;
@@ -593,6 +658,8 @@
       document.getElementById('outRafter').innerText = document.getElementById('rafterSize').value;
       document.getElementById('outPurlin').innerText = document.getElementById('purlinSize').value;
       document.getElementById('outRoof').innerText = document.getElementById('roofSize').value;
+
+      draw2DDesign();
     }
 
     function draw2DDesign() {
@@ -600,44 +667,195 @@
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const L = document.getElementById('lengthFt').value || 20;
+      // White background for clean PDF print
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const style = document.getElementById('designStyle').value;
+      const roofCol = document.getElementById('roofColor').value;
+      const bays = parseInt(document.getElementById('bayCount').value) || 4;
+      const L = document.getElementById('lengthFt').value || 15;
       const W = document.getElementById('widthFt').value || 15;
       const H = document.getElementById('heightFt').value || 10;
 
-      // Ground line
-      ctx.strokeStyle = '#334155';
-      ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(80, 300); ctx.lineTo(620, 300); ctx.stroke();
+      if (style === 'gazebo_pyramid') {
+        // --- GAZEBO DESIGN (2D FRONT + 3D PERSPECTIVE) ---
+        document.getElementById('lhDrawingTitle').innerText = `પ્રપોઝ્ડ ગઝેબો 2D ડિઝાઈન (Designer Gazebo: ${L} Ft × ${W} Ft × ${H} Ft)`;
 
-      // Left & Right Columns
-      ctx.fillStyle = '#1e3a8a';
-      ctx.fillRect(140, 140, 16, 160);
-      ctx.fillRect(544, 140, 16, 160);
+        // Ground & Plinth Base
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillRect(150, 295, 460, 14);
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(150, 295, 460, 14);
 
-      // Roof Truss / Peak
-      ctx.strokeStyle = '#b45309';
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.moveTo(120, 140); ctx.lineTo(350, 60); ctx.lineTo(580, 140); ctx.closePath();
-      ctx.stroke();
+        // 4 Gazebo Pillars (Front 2 heavy, Back 2 slightly inset for 3D depth)
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(245, 165, 11, 130); // Back Left
+        ctx.fillRect(504, 165, 11, 130); // Back Right
 
-      // Center Truss Support
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(350, 60); ctx.lineTo(350, 140);
-      ctx.moveTo(245, 100); ctx.lineTo(245, 140);
-      ctx.moveTo(455, 100); ctx.lineTo(455, 140);
-      ctx.stroke();
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(195, 165, 15, 130); // Front Left
+        ctx.fillRect(550, 165, 15, 130); // Front Right
 
-      // Labels
-      ctx.fillStyle = '#0f172a';
-      ctx.font = 'bold 14px sans-serif';
-      ctx.fillText(`Width (પહોળાઈ): ${W} Ft`, 280, 330);
-      ctx.fillText(`Height: ${H} Ft`, 55, 225);
-      ctx.fillText(`Length (લંબાઈ): ${L} Ft | Column: ${document.getElementById('colSize').value.split(' ')[0]}`, 170, 35);
+        // Decorative Corner Brackets & Top Beam
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(190, 160, 380, 10);
+        ctx.strokeStyle = '#b45309';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(210, 195); ctx.lineTo(240, 170);
+        ctx.moveTo(550, 195); ctx.lineTo(520, 170);
+        ctx.stroke();
+
+        // Pyramid Roof
+        ctx.fillStyle = roofCol;
+        ctx.beginPath();
+        ctx.moveTo(165, 162);
+        ctx.lineTo(380, 48);
+        ctx.lineTo(595, 162);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // Roof Hip Ridges & Tile Lines
+        ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+        ctx.lineWidth = 1.5;
+        for (let y = 75; y < 155; y += 16) {
+          let ratio = (y - 48) / (162 - 48);
+          let halfW = ratio * 215;
+          ctx.beginPath();
+          ctx.moveTo(380 - halfW, y);
+          ctx.lineTo(380 + halfW, y);
+          ctx.stroke();
+        }
+        // Center Ridge Lines
+        ctx.strokeStyle = '#fef08a';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(380, 48); ctx.lineTo(255, 162);
+        ctx.moveTo(380, 48); ctx.lineTo(505, 162);
+        ctx.stroke();
+
+        // Top Kalash / Finial
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(380, 38, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillRect(378, 22, 4, 26);
+
+        // Dimension Labels
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.fillText(`Width: ${W} Ft`, 340, 332);
+        ctx.fillText(`Depth: ${L} Ft`, 575, 290);
+        ctx.fillText(`Column H: ${H} Ft`, 95, 235);
+        ctx.fillText(`SKYLINE GAZEBO (${L}×${W} Ft)`, 280, 18);
+
+      } else {
+        // --- FULL SHED / PEB 2D + 3D ISOMETRIC VIEW ---
+        document.getElementById('lhDrawingTitle').innerText = `પ્રપોઝ્ડ આખા શેડની 2D ડિઝાઈન (Full Shed Layout: ${L} Ft L × ${W} Ft W × ${H} Ft H)`;
+
+        // Left Side: Front Truss Elevation (Width × Height)
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(35, 295); ctx.lineTo(310, 295); ctx.stroke();
+
+        // Front Columns
+        ctx.fillStyle = '#1e3a8a';
+        ctx.fillRect(65, 145, 12, 150);
+        ctx.fillRect(265, 145, 12, 150);
+
+        // Front Roof (Gable or Single Slope)
+        ctx.fillStyle = roofCol;
+        ctx.beginPath();
+        if (style === 'shed_gable') {
+          ctx.moveTo(50, 145); ctx.lineTo(171, 75); ctx.lineTo(292, 145);
+        } else {
+          ctx.moveTo(50, 115); ctx.lineTo(292, 155); ctx.lineTo(292, 163); ctx.lineTo(50, 123);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Internal Truss Webbing
+        if (style === 'shed_gable') {
+          ctx.beginPath();
+          ctx.moveTo(65, 145); ctx.lineTo(277, 145);
+          ctx.moveTo(171, 75); ctx.lineTo(171, 145);
+          ctx.moveTo(118, 110); ctx.lineTo(118, 145);
+          ctx.moveTo(224, 110); ctx.lineTo(224, 145);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText(`Front View (પહોળાઈ: ${W} Ft)`, 95, 320);
+        ctx.fillText(`H: ${H} Ft`, 15, 225);
+
+        // Right Side: Full Shed Length Isometric View (All Columns + Purlins + Roof Sheet)
+        const startX = 360, endX = 710;
+        const stepX = (endX - startX) / bays;
+
+        // Ground line
+        ctx.strokeStyle = '#475569';
+        ctx.beginPath(); ctx.moveTo(340, 295); ctx.lineTo(735, 295); ctx.stroke();
+
+        // Back Row Columns (with perspective offset +25px, -22px)
+        ctx.fillStyle = '#64748b';
+        for (let i = 0; i <= bays; i++) {
+          let cx = startX + i * stepX + 25;
+          ctx.fillRect(cx, 123, 8, 150);
+        }
+
+        // Roof Sheet Top Plane
+        ctx.fillStyle = roofCol;
+        ctx.beginPath();
+        ctx.moveTo(startX - 10, 145);
+        ctx.lineTo(endX + 10, 145);
+        ctx.lineTo(endX + 35, 100);
+        ctx.lineTo(startX + 15, 100);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Purlin Lines along Length
+        ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+        ctx.lineWidth = 1.5;
+        for (let p = 1; p <= 3; p++) {
+          let py = 145 - p * 11;
+          let pxOff = p * 6;
+          ctx.beginPath();
+          ctx.moveTo(startX - 10 + pxOff, py);
+          ctx.lineTo(endX + 10 + pxOff, py);
+          ctx.stroke();
+        }
+
+        // Front Row Columns
+        ctx.fillStyle = '#1e3a8a';
+        for (let i = 0; i <= bays; i++) {
+          let cx = startX + i * stepX;
+          ctx.fillRect(cx, 145, 11, 150);
+        }
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText(`Full Shed Side Length View (લંબાઈ: ${L} Ft | ${bays + 1} Columns/Side)`, 380, 320);
+        ctx.fillText(`SKYLINE SHED / PEB (${L}×${W}×${H} Ft)`, 260, 22);
+      }
+
+      // Copy Canvas Image into Letterhead PDF Preview
+      const imgData = canvas.toDataURL('image/png');
+      document.getElementById('lhDrawingImg').src = imgData;
 
       document.getElementById('canvasSummary').innerHTML =
-        `<strong>Structure Spec:</strong> ${L} Ft × ${W} Ft × ${H} Ft | <strong>Column:</strong> ${document.getElementById('colSize').value} | <strong>Rafter:</strong> ${document.getElementById('rafterSize').value}`;
+        `<strong>Structure Spec:</strong> ${L} Ft (L) × ${W} Ft (W) × ${H} Ft (H) | <strong>Column:</strong> ${document.getElementById('colSize').value}`;
     }
   </script>
 </body>
