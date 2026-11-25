@@ -3,101 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Skyline FabPro - Quotation & Structure Design</title>
+  <title>Skyline FabPro - Quotation, 2D Design & Structure App</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f172a" />
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { margin: 0; background: #0f172a; color: #1e293b; }
-    .container { max-width: 900px; margin: 0 auto; padding: 15px; }
-    
+    .container { max-width: 920px; margin: 0 auto; padding: 12px; }
+
     /* Login Screen */
-    #loginScreen {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
-    }
+    #loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .login-card {
-      background: #ffffff; padding: 30px 25px; border-radius: 16px; width: 100%; max-width: 400px;
-      text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      background: #fff; padding: 28px 24px; border-radius: 16px; width: 100%; max-width: 400px;
+      text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.35);
     }
     .logo-box {
       width: 56px; height: 56px; background: #f59e0b; color: #0f172a; font-weight: 900;
-      font-size: 22px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 12px;
+      font-size: 22px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;
     }
-    .login-card h2 { margin: 5px 0 20px; color: #0f172a; font-size: 20px; }
     input, select, textarea {
-      width: 100%; padding: 11px 12px; margin-bottom: 12px; border: 1px solid #cbd5e1;
+      width: 100%; padding: 10px 12px; margin-bottom: 10px; border: 1px solid #cbd5e1;
       border-radius: 8px; font-size: 14px; background: #f8fafc;
     }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: #2563eb; background: #fff; }
+    input:focus, select:focus { outline: none; border-color: #2563eb; background: #fff; }
     .btn {
-      width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 15px;
+      width: 100%; padding: 11px; border: none; border-radius: 8px; font-size: 14px;
       font-weight: 700; cursor: pointer; transition: 0.2s;
     }
     .btn-primary { background: #1e3a8a; color: #fff; }
-    .btn-primary:hover { background: #172554; }
-    .btn-success { background: #15803d; color: #fff; margin-top: 10px; }
-    .btn-warning { background: #d97706; color: #fff; margin-top: 10px; }
+    .btn-success { background: #15803d; color: #fff; }
+    .btn-warning { background: #d97706; color: #fff; }
 
     /* Main App */
-    #appScreen { display: none; padding-bottom: 40px; }
+    #appScreen { display: none; padding-bottom: 75px; }
     .topbar {
-      background: #1e293b; color: #fff; padding: 14px 18px; border-radius: 12px;
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
-      border-bottom: 3px solid #f59e0b;
+      background: #1e293b; color: #fff; padding: 12px 16px; border-radius: 12px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
+      border-bottom: 3px solid #f59e0b; flex-wrap: wrap; gap: 8px;
     }
     .topbar h1 { margin: 0; font-size: 18px; color: #fbbf24; }
-    .topbar p { margin: 2px 0 0; font-size: 12px; color: #cbd5e1; }
+    .topbar p { margin: 2px 0 0; font-size: 11px; color: #cbd5e1; }
+    .lang-group button {
+      background: #334155; color: #fff; border: 1px solid #475569; padding: 5px 10px;
+      border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600;
+    }
+    .lang-group button.active { background: #f59e0b; color: #0f172a; border-color: #f59e0b; }
+
     .card {
-      background: #ffffff; border-radius: 12px; padding: 18px; margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
     }
     .card h3 {
-      margin: 0 0 14px; font-size: 16px; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;
+      margin: 0 0 12px; font-size: 15px; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;
+      display: flex; justify-content: space-between; align-items: center;
     }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
 
-    /* Letterhead Preview & Print Styling */
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b;
+      display: flex; justify-content: space-around; padding: 8px 0; border-top: 2px solid #f59e0b; z-index: 99;
+    }
+    .bottom-nav button {
+      background: none; border: none; color: #cbd5e1; font-size: 12px; font-weight: 700;
+      cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    }
+    .bottom-nav button.active { color: #fbbf24; }
+
+    /* Letterhead Styling */
     .letterhead {
-      background: #fff; border: 2px solid #0f172a; padding: 24px; border-radius: 8px; color: #000;
+      background: #fff; border: 2px solid #0f172a; padding: 22px; border-radius: 8px; color: #000;
     }
     .lh-header {
       display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 3px solid #b45309; padding-bottom: 12px; margin-bottom: 14px;
+      border-bottom: 3px solid #b45309; padding-bottom: 10px; margin-bottom: 12px;
     }
-    .lh-title h2 { margin: 0; color: #0f172a; font-size: 24px; letter-spacing: 0.5px; }
-    .lh-title p { margin: 3px 0 0; font-size: 12px; color: #334155; font-weight: 600; }
+    .lh-title h2 { margin: 0; color: #0f172a; font-size: 22px; }
+    .lh-title p { margin: 3px 0 0; font-size: 11px; color: #334155; font-weight: 600; }
     .lh-contact { text-align: right; font-size: 12px; line-height: 1.5; color: #0f172a; }
     .lh-badge {
       background: #0f172a; color: #fbbf24; text-align: center; padding: 5px;
-      font-weight: 700; font-size: 14px; letter-spacing: 1px; margin-bottom: 14px;
+      font-weight: 700; font-size: 13px; letter-spacing: 1px; margin-bottom: 12px;
     }
     .lh-meta {
-      display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 14px;
+      display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 12px;
       background: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;
     }
-    table.q-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 13px; }
-    table.q-table th, table.q-table td { border: 1px solid #94a3b8; padding: 8px 10px; text-align: left; }
+    table.q-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 12.5px; }
+    table.q-table th, table.q-table td { border: 1px solid #94a3b8; padding: 7px 9px; text-align: left; }
     table.q-table th { background: #0f172a; color: #fff; }
     .spec-box {
-      background: #fffbeb; border: 1px solid #f59e0b; padding: 12px; border-radius: 6px; margin-bottom: 14px;
+      background: #fffbeb; border: 1px solid #f59e0b; padding: 11px; border-radius: 6px; margin-bottom: 12px;
     }
-    .spec-box h4 { margin: 0 0 8px; color: #92400e; font-size: 14px; }
-    .spec-box ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6; }
-    .terms-box { font-size: 12px; line-height: 1.6; color: #334155; border-top: 1px dashed #94a3b8; padding-top: 10px; }
-    .lh-footer {
-      display: flex; justify-content: space-between; margin-top: 28px; font-size: 13px; font-weight: 700;
-    }
+    .spec-box h4 { margin: 0 0 6px; color: #92400e; font-size: 13.5px; }
+    .spec-box ul { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+    .terms-box { font-size: 11.5px; line-height: 1.55; color: #334155; border-top: 1px dashed #94a3b8; padding-top: 8px; }
+    .lh-footer { display: flex; justify-content: space-between; margin-top: 24px; font-size: 12.5px; font-weight: 700; }
+
+    canvas { width: 100%; max-width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; }
 
     @media print {
       body { background: #fff; }
-      #loginScreen, .topbar, .no-print { display: none !important; }
+      #loginScreen, .topbar, .no-print, .bottom-nav { display: none !important; }
       #appScreen { display: block !important; padding: 0; }
+      .tab-section { display: none !important; }
+      #tabQuotation { display: block !important; }
       .container { max-width: 100%; padding: 0; }
       .card { box-shadow: none; padding: 0; margin: 0; }
-      .letterhead { border: 2px solid #000; padding: 18px; }
+      .letterhead { border: 2px solid #000; padding: 16px; }
     }
     @media (max-width: 600px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -112,8 +127,9 @@
   <div id="loginScreen">
     <div class="login-card">
       <div class="logo-box">SF</div>
-      <h2>Skyline FabPro માં સ્વાગત છે</h2>
-      <input type="text" id="loginName" placeholder="તમારું નામ (દા.ત. જયવીરભાઈ મકવાણા)" value="જયવીરભાઈ મકવાણા" />
+      <h2>Skyline FabPro</h2>
+      <p style="font-size:13px;color:#64748b;margin-top:-10px;margin-bottom:16px;">Quotation, 2D Design &amp; Structure App</p>
+      <input type="text" id="loginName" placeholder="તમારું નામ" value="જયવીરભાઈ મકવાણા" />
       <input type="tel" id="loginMobile" placeholder="મોબાઈલ નંબર" value="9106743538" />
       <div id="otpSection" style="display:none;">
         <input type="text" id="otpInput" placeholder="4 અંકનો OTP નાખો (દા.ત. 1234)" maxlength="4" />
@@ -128,193 +144,262 @@
       <div class="topbar no-print">
         <div>
           <h1>SKYLINE FABPRO</h1>
-          <p>Quotation &amp; PEB / Pipe Structure Designer</p>
+          <p id="subHeaderText">Fabrication Quotation &amp; 2D Structure App</p>
         </div>
-        <button onclick="logout()" style="background:#ef4444;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;">Logout</button>
+        <div class="lang-group">
+          <button id="btnGu" class="active" onclick="setLang('gu')">ગુજ</button>
+          <button id="btnHi" onclick="setLang('hi')">हिन्दी</button>
+          <button id="btnEn" onclick="setLang('en')">EN</button>
+        </div>
       </div>
 
-      <!-- INPUT FORM -->
-      <div class="card no-print">
-        <h3>૧. પાર્ટી અને પ્રોજેક્ટની વિગત ભરો</h3>
-        <div class="grid-2">
-          <div>
-            <label>પાર્ટી / ગ્રાહકનું નામ</label>
-            <input type="text" id="partyName" placeholder="દા.ત. રાજેશભાઈ પટેલ" oninput="updateQuotation()" />
+      <!-- TAB 1: QUOTATION & LETTERHEAD PDF -->
+      <div id="tabQuotation" class="tab-section">
+        <div class="card no-print">
+          <h3>
+            <span id="lblClientTitle">૧. ગ્રાહકની વિગત (Client Details)</span>
+            <span style="font-size:12px;color:#d97706;" id="badgeQuoteNo">QT-101</span>
+          </h3>
+          <div class="grid-2">
+            <div>
+              <label id="lblPartyName">ગ્રાહકનું નામ *</label>
+              <input type="text" id="partyName" placeholder="દા.ત. રાજેશભાઈ પટેલ" oninput="updateQuotation()" />
+            </div>
+            <div>
+              <label id="lblPartyMobile">મોબાઈલ નંબર</label>
+              <input type="tel" id="partyMobile" placeholder="દા.ત. 9876543210" oninput="updateQuotation()" />
+            </div>
           </div>
           <div>
-            <label>પાર્ટી મોબાઈલ નંબર</label>
-            <input type="tel" id="partyMobile" placeholder="દા.ત. 9876543210" oninput="updateQuotation()" />
-          </div>
-        </div>
-        <div class="grid-2">
-          <div>
-            <label>સાઈટનું સરનામું (શહેર/વિસ્તાર)</label>
+            <label id="lblPartyAddr">સાઈટનું સરનામું / શહેર</label>
             <input type="text" id="partyAddress" placeholder="દા.ત. કામરેજ, સુરત" oninput="updateQuotation()" />
           </div>
-          <div>
-            <label>કામનો પ્રકાર (Work Type)</label>
-            <select id="workType" onchange="autoSuggestSpecs()">
-              <option value="gazebo_naliya">Gazebo (નળિયાવાળો ગઝેબો)</option>
-              <option value="gazebo_upvc">Gazebo (UPVC પતરાવાળો ગઝેબો)</option>
-              <option value="shed_ms">Industrial / Parking Shed (MS Pipe શેડ)</option>
-              <option value="peb_structure">PEB Heavy Structure (H-Beam / ISMB શેડ)</option>
-            </select>
-          </div>
         </div>
 
-        <div class="grid-3">
-          <div>
-            <label>મટીરીયલ પ્રકાર (Scope)</label>
-            <select id="materialMode" onchange="autoSuggestSpecs()">
-              <option value="with_material">With Material (મટીરીયલ સાથે)</option>
-              <option value="labor_only">Only Labor (ફક્ત મજૂરી)</option>
-            </select>
-          </div>
-          <div>
-            <label>લંબાઈ (Length - ફૂટમાં)</label>
-            <input type="number" id="lengthFt" value="15" min="1" oninput="autoSuggestSpecs()" />
-          </div>
-          <div>
-            <label>પહોળાઈ (Width - ફૂટમાં)</label>
-            <input type="number" id="widthFt" value="15" min="1" oninput="autoSuggestSpecs()" />
-          </div>
-        </div>
-
-        <div class="grid-3">
-          <div>
-            <label>કુલ ચોરસ ફૂટ (Total Sq.Ft)</label>
-            <input type="number" id="totalSqft" value="225" oninput="updateQuotation()" />
-          </div>
-          <div>
-            <label>ભાવ પ્રતિ ચો.ફૂટ (Rate ₹/Sq.Ft)</label>
-            <input type="number" id="rateSqft" value="410" oninput="updateQuotation()" />
-          </div>
-          <div>
-            <label>કુલ અંદાજિત રકમ (Total ₹)</label>
-            <input type="text" id="totalAmountDisplay" readonly style="background:#e2e8f0;font-weight:700;" />
-          </div>
-        </div>
-      </div>
-
-      <!-- PIPE / PEB COLUMN SPECIFICATIONS -->
-      <div class="card no-print" id="specCard">
-        <h3>૨. મટીરીયલ સ્પેસિફિકેશન (Pipe / PEB Column ના માપ - ઓટો સજેસ્ટ)</h3>
-        <div class="grid-2">
-          <div>
-            <label>મેઈન કોલમ / થાંભલા (Main Column Size)</label>
-            <input type="text" id="colSize" oninput="updateQuotation()" />
-          </div>
-          <div>
-            <label>ટ્રસ / રાફ્ટર / કાંચી (Rafter / Truss Pipe)</label>
-            <input type="text" id="rafterSize" oninput="updateQuotation()" />
-          </div>
-        </div>
-        <div class="grid-2">
-          <div>
-            <label>પર્લિન / આડા પાઈપ (Purlin Size)</label>
-            <input type="text" id="purlinSize" oninput="updateQuotation()" />
-          </div>
-          <div>
-            <label>બેઝ પ્લેટ અને રૂફિંગ (Base Plate &amp; Roofing)</label>
-            <input type="text" id="roofSize" oninput="updateQuotation()" />
-          </div>
-        </div>
-      </div>
-
-      <!-- OFFICIAL LETTERHEAD PREVIEW -->
-      <div class="card">
-        <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <h3 style="margin:0;border:none;padding:0;">૩. ઓફિશિયલ લેટરહેડ કોટેશન પ્રિવ્યુ</h3>
-          <button class="btn btn-success" style="width:auto;padding:10px 18px;margin:0;" onclick="downloadPDF()">📄 PDF ડાઉનલોડ / પ્રિન્ટ કરો</button>
-        </div>
-
-        <div class="letterhead" id="letterheadArea">
-          <div class="lh-header">
-            <div class="lh-title">
-              <h2>SKYLINE FABRICATION</h2>
-              <p>Industrial Sheds • PEB Structures • Designer Gazebos &amp; All MS/SS Work</p>
-            </div>
-            <div class="lh-contact">
-              <strong>જયવીરભાઈ મકવાણા</strong><br />
-              📞 મો: +91 91067 43538<br />
-              📍 સુરત, ગુજરાત
-            </div>
-          </div>
-
-          <div class="lh-badge">QUOTATION / ESTIMATE</div>
-
-          <div class="lh-meta">
+        <div class="card no-print">
+          <h3 id="lblWorkTitle">૨. કામનો પ્રકાર અને માપ (Work &amp; Size)</h3>
+          <div class="grid-2">
             <div>
-              <strong>પ્રતિ શ્રી (To):</strong> <span id="outPartyName">માનનીય ગ્રાહકશ્રી</span><br />
-              <strong>મોબાઈલ:</strong> <span id="outPartyMobile">-</span><br />
-              <strong>સાઈટ સરનામું:</strong> <span id="outPartyAddress">-</span>
+              <label id="lblCategory">કેટેગરી</label>
+              <select id="workType" onchange="autoSuggestSpecs()">
+                <option value="gazebo_naliya">Gazebo (નળિયાવાળો ગઝેબો)</option>
+                <option value="gazebo_upvc">Gazebo (UPVC પતરાવાળો ગઝેબો)</option>
+                <option value="shed_ms">Industrial / Parking Shed (MS Pipe શેડ)</option>
+                <option value="peb_structure">PEB Heavy Structure (H-Beam / ISMB શેડ)</option>
+              </select>
             </div>
-            <div style="text-align:right;">
-              <strong>કોટેશન નં:</strong> <span id="outQuoteNo">SF-2026-01</span><br />
-              <strong>તારીખ:</strong> <span id="outDate"></span><br />
-              <strong>કામનો પ્રકાર:</strong> <span id="outScopeBadge">With Material</span>
+            <div>
+              <label id="lblScope">કામનો પ્રકાર</label>
+              <select id="materialMode" onchange="autoSuggestSpecs()">
+                <option value="with_material">With Material (મટીરીયલ સાથે)</option>
+                <option value="labor_only">Only Labor (ફક્ત મજૂરી)</option>
+              </select>
             </div>
           </div>
 
-          <table class="q-table">
-            <thead>
-              <tr>
-                <th style="width:8%;">ક્રમ</th>
-                <th style="width:44%;">કામની વિગત (Description)</th>
-                <th style="width:16%;">માપ (Sq.Ft)</th>
-                <th style="width:16%;">ભાવ (₹/Sq.Ft)</th>
-                <th style="width:16%;">કુલ રકમ (₹)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>
-                  <strong id="outWorkTitle">Gazebo (નળિયાવાળો ગઝેબો)</strong><br />
-                  <small id="outDimensions">સાઈઝ: 15 ફૂટ × 15 ફૂટ</small>
-                </td>
-                <td id="outSqft">225</td>
-                <td id="outRate">₹ 410</td>
-                <td><strong id="outTotal">₹ 92,250</strong></td>
-              </tr>
-            </tbody>
-          </table>
-
-          <!-- MATERIAL & COLUMN SPECS IN LETTERHEAD -->
-          <div class="spec-box" id="outSpecSection">
-            <h4>મટીરીયલ અને સ્ટ્રક્ચરના ચોક્કસ માપ (Material &amp; Column Specifications):</h4>
-            <ul>
-              <li><strong>મેઈન કોલમ (Main Column):</strong> <span id="outCol"></span></li>
-              <li><strong>રાફ્ટર / ટ્રસ (Rafter / Truss):</strong> <span id="outRafter"></span></li>
-              <li><strong>પર્લિન / આડા પાઈપ (Purlin):</strong> <span id="outPurlin"></span></li>
-              <li><strong>બેઝ પ્લેટ અને રૂફિંગ (Roofing &amp; Finish):</strong> <span id="outRoof"></span></li>
-            </ul>
+          <div class="grid-3">
+            <div>
+              <label id="lblLen">લંબાઈ (L - Ft)</label>
+              <input type="number" id="lengthFt" value="20" min="1" oninput="autoSuggestSpecs()" />
+            </div>
+            <div>
+              <label id="lblWid">પહોળાઈ (W - Ft)</label>
+              <input type="number" id="widthFt" value="15" min="1" oninput="autoSuggestSpecs()" />
+            </div>
+            <div>
+              <label id="lblHei">ઊંચાઈ (H - Ft)</label>
+              <input type="number" id="heightFt" value="10" min="1" oninput="autoSuggestSpecs()" />
+            </div>
           </div>
 
-          <div class="terms-box">
-            <strong>નિયમો અને શરતો (Terms &amp; Conditions):</strong><br />
-            ૧. કોલમ ઉભા કરવા માટેના સિવિલ / RCC ફાઉન્ડેશન ખાડા તથા કોંક્રીટનું કામ પાર્ટી તરફથી રહેશે.<br />
-            ૨. સાઈટ પર વેલ્ડિંગ માટે ઈલેક્ટ્રીક પાવર (લાઈટ) અને પાણીની વ્યવસ્થા પાર્ટીએ કરી આપવાની રહેશે.<br />
-            ૩. લોખંડના સ્ટ્રક્ચર પર એક કોટ રેડ ઓક્સાઈડ પ્રાઈમર અને બે કોટ કલર કામ (With Material માં) સામેલ છે.<br />
-            ૪. પેમેન્ટ શરતો: ૫૦% એડવાન્સ ઓર્ડર સાથે, ૪૦% મટીરીયલ સાઈટ પર આવ્યા બાદ અને ૧૦% કામ પૂર્ણ થયે ચૂકવવાના રહેશે.<br />
-            ૫. આ કોટેશનની માન્યતા ૧૫ દિવસ સુધી રહેશે (GST અલગથી લાગુ પડશે).
-          </div>
-
-          <div class="lh-footer">
-            <div>ગ્રાહકની સહી (Customer Sign)</div>
-            <div style="text-align:right;">
-              For, SKYLINE FABRICATION<br />
-              <span style="font-size:12px;font-weight:normal;">(જયવીરભાઈ મકવાણા)</span>
+          <div class="grid-3">
+            <div>
+              <label id="lblSqft">કુલ Sq.Ft</label>
+              <input type="number" id="totalSqft" value="300" oninput="updateQuotation()" />
+            </div>
+            <div>
+              <label id="lblRate">ભાવ (₹ / Sq.Ft)</label>
+              <input type="number" id="rateSqft" value="110" oninput="updateQuotation()" />
+            </div>
+            <div>
+              <label>GST % / Advance %</label>
+              <div style="display:flex;gap:6px;">
+                <select id="gstRate" onchange="updateQuotation()" style="margin:0;">
+                  <option value="0">0% GST</option>
+                  <option value="18">18% GST</option>
+                </select>
+                <input type="number" id="advPct" value="50" min="0" max="100" oninput="updateQuotation()" style="margin:0;" title="Advance %" />
+              </div>
             </div>
           </div>
         </div>
 
-        <button class="btn btn-warning no-print" onclick="downloadPDF()">🖨️ Save as PDF / Print Letterhead</button>
+        <!-- PIPE / PEB COLUMN AUTO SPECS -->
+        <div class="card no-print" id="specCard">
+          <h3 id="lblSpecTitle">૩. પાઈપ / PEB કોલમ ના ચોક્કસ માપ (With Material Specs)</h3>
+          <div class="grid-2">
+            <div>
+              <label>મેઈન કોલમ / થાંભલા (Main Column)</label>
+              <input type="text" id="colSize" oninput="updateQuotation()" />
+            </div>
+            <div>
+              <label>ટ્રસ / રાફ્ટર / કાંચી (Rafter / Truss)</label>
+              <input type="text" id="rafterSize" oninput="updateQuotation()" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div>
+              <label>પર્લિન / આડા પાઈપ (Purlin Size)</label>
+              <input type="text" id="purlinSize" oninput="updateQuotation()" />
+            </div>
+            <div>
+              <label>બેઝ પ્લેટ અને રૂફિંગ (Base Plate &amp; Sheet)</label>
+              <input type="text" id="roofSize" oninput="updateQuotation()" />
+            </div>
+          </div>
+        </div>
+
+        <!-- LETTERHEAD PREVIEW -->
+        <div class="card">
+          <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+            <h3 style="margin:0;border:none;padding:0;" id="lblPreviewTitle">૪. ઓફિશિયલ લેટરહેડ PDF પ્રિવ્યુ</h3>
+            <button class="btn btn-success" style="width:auto;padding:9px 16px;" onclick="window.print()">📄 PDF ડાઉનલોડ / પ્રિન્ટ</button>
+          </div>
+
+          <div class="letterhead" id="letterheadArea">
+            <div class="lh-header">
+              <div class="lh-title">
+                <h2>SKYLINE FABRICATION</h2>
+                <p>Industrial Sheds • PEB Structures • Designer Gazebos &amp; All MS/SS Work</p>
+              </div>
+              <div class="lh-contact">
+                <strong>જયવીરભાઈ મકવાણા</strong><br />
+                📞 મો: +91 91067 43538<br />
+                📍 સુરત, ગુજરાત
+              </div>
+            </div>
+
+            <div class="lh-badge">QUOTATION / ESTIMATE</div>
+
+            <div class="lh-meta">
+              <div>
+                <strong>પ્રતિ શ્રી (To):</strong> <span id="outPartyName">માનનીય ગ્રાહકશ્રી</span><br />
+                <strong>મોબાઈલ:</strong> <span id="outPartyMobile">-</span><br />
+                <strong>સાઈટ સરનામું:</strong> <span id="outPartyAddress">-</span>
+              </div>
+              <div style="text-align:right;">
+                <strong>કોટેશન નં:</strong> <span id="outQuoteNo">QT-101</span><br />
+                <strong>તારીખ:</strong> <span id="outDate"></span><br />
+                <strong>કામનો પ્રકાર:</strong> <span id="outScopeBadge">With Material</span>
+              </div>
+            </div>
+
+            <table class="q-table">
+              <thead>
+                <tr>
+                  <th style="width:7%;">ક્રમ</th>
+                  <th style="width:45%;">કામની વિગત (Description)</th>
+                  <th style="width:15%;">માપ (Sq.Ft)</th>
+                  <th style="width:16%;">ભાવ (₹)</th>
+                  <th style="width:17%;">કુલ રકમ (₹)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <strong id="outWorkTitle">Industrial / Parking Shed</strong><br />
+                    <small id="outDimensions">સાઈઝ: 20 ફૂટ × 15 ફૂટ × 10 ફૂટ (H)</small>
+                  </td>
+                  <td id="outSqft">300</td>
+                  <td id="outRate">₹ 110</td>
+                  <td><strong id="outSubTotal">₹ 33,000</strong></td>
+                </tr>
+                <tr id="gstRow" style="display:none;">
+                  <td colspan="4" style="text-align:right;"><strong>GST (18%):</strong></td>
+                  <td id="outGstAmt">₹ 0</td>
+                </tr>
+                <tr>
+                  <td colspan="4" style="text-align:right;background:#f1f5f9;"><strong>ગ્રાન્ડ ટોટલ (Grand Total):</strong></td>
+                  <td style="background:#f1f5f9;"><strong id="outGrandTotal" style="font-size:14px;">₹ 33,000</strong></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- PIPE / PEB COLUMN SPECS BOX -->
+            <div class="spec-box" id="outSpecSection">
+              <h4>મટીરીયલ અને સ્ટ્રક્ચરના ચોક્કસ માપ (Pipe &amp; PEB Column Specifications):</h4>
+              <ul>
+                <li><strong>મેઈન કોલમ / થાંભલા (Main Column):</strong> <span id="outCol"></span></li>
+                <li><strong>રાફ્ટર / ટ્રસ / કાંચી (Rafter / Truss):</strong> <span id="outRafter"></span></li>
+                <li><strong>પર્લિન / આડા પાઈપ (Purlin):</strong> <span id="outPurlin"></span></li>
+                <li><strong>બેઝ પ્લેટ અને રૂફિંગ (Roofing &amp; Finish):</strong> <span id="outRoof"></span></li>
+              </ul>
+            </div>
+
+            <div class="terms-box">
+              <strong>નિયમો અને શરતો (Terms &amp; Conditions):</strong><br />
+              ૧. કોલમ ઉભા કરવા માટેના સિવિલ / RCC ફાઉન્ડેશન ખાડા તથા કોંક્રીટનું કામ પાર્ટી તરફથી રહેશે.<br />
+              ૨. સાઈટ પર વેલ્ડિંગ માટે ઈલેક્ટ્રીક પાવર (લાઈટ) અને પાણીની વ્યવસ્થા પાર્ટીએ કરી આપવાની રહેશે.<br />
+              ૩. લોખંડના સ્ટ્રક્ચર પર એક કોટ રેડ ઓક્સાઈડ પ્રાઈમર અને બે કોટ કલર કામ (With Material માં) સામેલ છે.<br />
+              ૪. પેમેન્ટ શરતો: <span id="outAdvText">૫૦%</span> એડવાન્સ ઓર્ડર સાથે, ૪૦% મટીરીયલ સાઈટ પર આવ્યા બાદ અને બાકીનું કામ પૂર્ણ થયે ચૂકવવાના રહેશે.<br />
+              ૫. આ કોટેશનની માન્યતા ૧૫ દિવસ સુધી રહેશે.
+            </div>
+
+            <div class="lh-footer">
+              <div>ગ્રાહકની સહી (Customer Sign)</div>
+              <div style="text-align:right;">
+                For, SKYLINE FABRICATION<br />
+                <span style="font-size:11.5px;font-weight:normal;">(જયવીરભાઈ મકવાણા)</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-warning no-print" style="margin-top:12px;" onclick="window.print()">🖨️ Save as PDF / Print Letterhead</button>
+        </div>
       </div>
+
+      <!-- TAB 2: 2D STRUCTURE DESIGN -->
+      <div id="tab2D" class="tab-section" style="display:none;">
+        <div class="card">
+          <h3>📐 2D Structure &amp; Column Layout Drawing</h3>
+          <p style="font-size:12.5px;color:#475569;margin-top:0;">તમારા નાખેલા માપ (L × W × H) મુજબ ઓટોમેટિક 2D એલિવેશન ડ્રોઈંગ:</p>
+          <canvas id="designCanvas" width="700" height="360"></canvas>
+          <div style="margin-top:10px;font-size:13px;background:#f8fafc;padding:10px;border-radius:8px;border:1px solid #cbd5e1;" id="canvasSummary"></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: PROFILE & SUBSCRIPTION -->
+      <div id="tabProfile" class="tab-section" style="display:none;">
+        <div class="card">
+          <h3>👤 Skyline FabPro પ્રોફાઈલ &amp; પ્લાન</h3>
+          <p><strong>કંપની:</strong> Skyline Fabrication (જયવીરભાઈ મકવાણા)</p>
+          <p><strong>મોબાઈલ:</strong> +91 91067 43538 (સુરત, ગુજરાત)</p>
+          <div style="background:#fffbeb;border:1px solid #f59e0b;padding:12px;border-radius:8px;margin-top:12px;">
+            <strong style="color:#92400e;">⭐ Pro Plan: ₹1,199 / વર્ષ (Annual Subscription)</strong>
+            <p style="font-size:13px;margin:6px 0 0;">અનલિમિટેડ લેટરહેડ PDF કોટેશન, ઓટો Pipe/PEB કેલ્ક્યુલેટર અને 2D સ્ટ્રક્ચર ડિઝાઈન સક્રિય છે.</p>
+          </div>
+          <button class="btn" style="background:#ef4444;color:#fff;margin-top:14px;" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <div class="bottom-nav no-print">
+      <button id="navQuote" class="active" onclick="switchTab('tabQuotation', 'navQuote')">📄 કોટેશન / PDF</button>
+      <button id="nav2D" onclick="switchTab('tab2D', 'nav2D')">📐 2D ડિઝાઈન</button>
+      <button id="navProfile" onclick="switchTab('tabProfile', 'navProfile')">👤 પ્રોફાઈલ / ₹1199</button>
     </div>
   </div>
 
   <script>
+    // Clear old service worker cache if present
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        for (let r of regs) r.unregister();
+      });
+    }
+
     let otpSent = false;
 
     function handleLogin() {
@@ -324,7 +409,7 @@
         otpSec.style.display = 'block';
         btn.innerText = 'Verify OTP & Enter App';
         otpSent = true;
-        alert('તમારો ડેમો OTP: 1234 છે (કોઈપણ 4 અંક નાખીને આગળ વધો)');
+        alert('તમારો OTP: 1234 છે (કોઈપણ 4 અંક નાખીને આગળ વધો)');
       } else {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('appScreen').style.display = 'block';
@@ -337,10 +422,44 @@
       document.getElementById('loginScreen').style.display = 'flex';
     }
 
+    function switchTab(tabId, navId) {
+      document.querySelectorAll('.tab-section').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.bottom-nav button').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).style.display = 'block';
+      document.getElementById(navId).classList.add('active');
+      if (tabId === 'tab2D') draw2DDesign();
+    }
+
+    function setLang(lang) {
+      document.querySelectorAll('.lang-group button').forEach(b => b.classList.remove('active'));
+      if (lang === 'gu') {
+        document.getElementById('btnGu').classList.add('active');
+        document.getElementById('lblClientTitle').innerText = '૧. ગ્રાહકની વિગત (Client Details)';
+        document.getElementById('lblWorkTitle').innerText = '૨. કામનો પ્રકાર અને માપ (Work & Size)';
+        document.getElementById('lblSpecTitle').innerText = '૩. પાઈપ / PEB કોલમ ના ચોક્કસ માપ (With Material Specs)';
+        document.getElementById('lblPreviewTitle').innerText = '૪. ઓફિશિયલ લેટરહેડ PDF પ્રિવ્યુ';
+      } else if (lang === 'hi') {
+        document.getElementById('btnHi').classList.add('active');
+        document.getElementById('lblClientTitle').innerText = '१. ग्राहक का विवरण (Client Details)';
+        document.getElementById('lblWorkTitle').innerText = '२. काम का प्रकार और माप (Work & Size)';
+        document.getElementById('lblSpecTitle').innerText = '३. पाइप / PEB कॉलम के सटीक माप (With Material Specs)';
+        document.getElementById('lblPreviewTitle').innerText = '४. ऑफिशियल लेटरहेड PDF प्रिव्यू';
+      } else {
+        document.getElementById('btnEn').classList.add('active');
+        document.getElementById('lblClientTitle').innerText = '1. Client Details';
+        document.getElementById('lblWorkTitle').innerText = '2. Work Type & Dimensions';
+        document.getElementById('lblSpecTitle').innerText = '3. Pipe & PEB Column Specifications (Auto-Suggest)';
+        document.getElementById('lblPreviewTitle').innerText = '4. Official Letterhead PDF Preview';
+      }
+    }
+
     function initApp() {
       const today = new Date();
       document.getElementById('outDate').innerText = today.toLocaleDateString('en-IN');
-      document.getElementById('outQuoteNo').innerText = 'SF-' + today.getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
+      const qNo = 'QT-' + Math.floor(101 + Math.random() * 899);
+      document.getElementById('outQuoteNo').innerText = qNo;
+      document.getElementById('badgeQuoteNo').innerText = qNo;
+      document.getElementById('workType').value = 'shed_ms';
       autoSuggestSpecs();
     }
 
@@ -351,12 +470,10 @@
       const W = parseFloat(document.getElementById('widthFt').value) || 0;
       const maxSpan = Math.max(L, W);
 
-      // Calculate SqFt
       const sqft = Math.round(L * W);
       document.getElementById('totalSqft').value = sqft;
 
-      // Default Rates
-      let rate = 410;
+      let rate = 110;
       if (mode === 'with_material') {
         if (workType === 'gazebo_naliya') rate = 410;
         else if (workType === 'gazebo_upvc') rate = 380;
@@ -365,12 +482,11 @@
       } else {
         if (workType === 'gazebo_naliya') rate = 70;
         else if (workType === 'gazebo_upvc') rate = 50;
-        else if (workType === 'shed_ms') rate = 25;
+        else if (workType === 'shed_ms') rate = 20;
         else if (workType === 'peb_structure') rate = 35;
       }
       document.getElementById('rateSqft').value = rate;
 
-      // Auto-Suggest Pipe / PEB Column Sizes based on Span
       let col = '', rafter = '', purlin = '', roof = '';
 
       if (workType === 'peb_structure') {
@@ -400,7 +516,6 @@
         }
         roof = '8mm MS Base Plate + Anchor Bolts + 0.45mm Color Coated Patra';
       } else {
-        // Gazebo (Naliya or UPVC)
         if (maxSpan <= 16) {
           col = '3"×3" (75×75mm) MS Square Pipe (2.5mm Gauge) - 4/6 Pillars';
           rafter = '2"×2" (50×50mm) MS Pipe Pyramid / Hip Frame';
@@ -434,25 +549,36 @@
 
       const L = document.getElementById('lengthFt').value || 0;
       const W = document.getElementById('widthFt').value || 0;
+      const H = document.getElementById('heightFt').value || 0;
       const sqft = parseFloat(document.getElementById('totalSqft').value) || 0;
       const rate = parseFloat(document.getElementById('rateSqft').value) || 0;
-      const total = Math.round(sqft * rate);
+      const gstPct = parseFloat(document.getElementById('gstRate').value) || 0;
+      const advPct = document.getElementById('advPct').value || 50;
 
-      document.getElementById('totalAmountDisplay').value = '₹ ' + total.toLocaleString('en-IN');
+      const subTotal = Math.round(sqft * rate);
+      const gstAmt = Math.round(subTotal * (gstPct / 100));
+      const grandTotal = subTotal + gstAmt;
 
-      // Update Letterhead
       document.getElementById('outPartyName').innerText = pName;
       document.getElementById('outPartyMobile').innerText = pMobile;
       document.getElementById('outPartyAddress').innerText = pAddress;
       document.getElementById('outScopeBadge').innerText = (mode === 'with_material') ? 'With Material (મટીરીયલ સાથે)' : 'Only Labor (ફક્ત મજૂરી)';
 
       document.getElementById('outWorkTitle').innerText = workTitle;
-      document.getElementById('outDimensions').innerText = 'સાઈઝ: ' + L + ' ફૂટ × ' + W + ' ફૂટ (' + (mode === 'with_material' ? 'With Material' : 'Only Labor') + ')';
+      document.getElementById('outDimensions').innerText = `સાઈઝ: ${L} ફૂટ (L) × ${W} ફૂટ (W) × ${H} ફૂટ (H)`;
       document.getElementById('outSqft').innerText = sqft;
       document.getElementById('outRate').innerText = '₹ ' + rate.toLocaleString('en-IN');
-      document.getElementById('outTotal').innerText = '₹ ' + total.toLocaleString('en-IN');
+      document.getElementById('outSubTotal').innerText = '₹ ' + subTotal.toLocaleString('en-IN');
 
-      // Specs visibility & text
+      if (gstPct > 0) {
+        document.getElementById('gstRow').style.display = 'table-row';
+        document.getElementById('outGstAmt').innerText = '₹ ' + gstAmt.toLocaleString('en-IN');
+      } else {
+        document.getElementById('gstRow').style.display = 'none';
+      }
+      document.getElementById('outGrandTotal').innerText = '₹ ' + grandTotal.toLocaleString('en-IN');
+      document.getElementById('outAdvText').innerText = advPct + '%';
+
       const specSection = document.getElementById('outSpecSection');
       const specCard = document.getElementById('specCard');
       if (mode === 'with_material') {
@@ -469,8 +595,49 @@
       document.getElementById('outRoof').innerText = document.getElementById('roofSize').value;
     }
 
-    function downloadPDF() {
-      window.print();
+    function draw2DDesign() {
+      const canvas = document.getElementById('designCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const L = document.getElementById('lengthFt').value || 20;
+      const W = document.getElementById('widthFt').value || 15;
+      const H = document.getElementById('heightFt').value || 10;
+
+      // Ground line
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(80, 300); ctx.lineTo(620, 300); ctx.stroke();
+
+      // Left & Right Columns
+      ctx.fillStyle = '#1e3a8a';
+      ctx.fillRect(140, 140, 16, 160);
+      ctx.fillRect(544, 140, 16, 160);
+
+      // Roof Truss / Peak
+      ctx.strokeStyle = '#b45309';
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(120, 140); ctx.lineTo(350, 60); ctx.lineTo(580, 140); ctx.closePath();
+      ctx.stroke();
+
+      // Center Truss Support
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(350, 60); ctx.lineTo(350, 140);
+      ctx.moveTo(245, 100); ctx.lineTo(245, 140);
+      ctx.moveTo(455, 100); ctx.lineTo(455, 140);
+      ctx.stroke();
+
+      // Labels
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText(`Width (પહોળાઈ): ${W} Ft`, 280, 330);
+      ctx.fillText(`Height: ${H} Ft`, 55, 225);
+      ctx.fillText(`Length (લંબાઈ): ${L} Ft | Column: ${document.getElementById('colSize').value.split(' ')[0]}`, 170, 35);
+
+      document.getElementById('canvasSummary').innerHTML =
+        `<strong>Structure Spec:</strong> ${L} Ft × ${W} Ft × ${H} Ft | <strong>Column:</strong> ${document.getElementById('colSize').value} | <strong>Rafter:</strong> ${document.getElementById('rafterSize').value}`;
     }
   </script>
 </body>
