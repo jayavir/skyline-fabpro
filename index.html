@@ -2,810 +2,475 @@
 <html lang="gu">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0f172a" />
-  <title>Skyline FabPro - Fabrication Quotation & 2D Design</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skyline FabPro - Quotation & Structure Design</title>
   <link rel="manifest" href="manifest.json" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="theme-color" content="#0f172a" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap');
-    body {
-      font-family: 'Inter', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif;
-      background-color: #f1f5f9;
-      -webkit-tap-highlight-color: transparent;
-      padding-bottom: 84px;
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { margin: 0; background: #0f172a; color: #1e293b; }
+    .container { max-width: 900px; margin: 0 auto; padding: 15px; }
+    
+    /* Login Screen */
+    #loginScreen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
     }
+    .login-card {
+      background: #ffffff; padding: 30px 25px; border-radius: 16px; width: 100%; max-width: 400px;
+      text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .logo-box {
+      width: 56px; height: 56px; background: #f59e0b; color: #0f172a; font-weight: 900;
+      font-size: 22px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .login-card h2 { margin: 5px 0 20px; color: #0f172a; font-size: 20px; }
+    input, select, textarea {
+      width: 100%; padding: 11px 12px; margin-bottom: 12px; border: 1px solid #cbd5e1;
+      border-radius: 8px; font-size: 14px; background: #f8fafc;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #2563eb; background: #fff; }
+    .btn {
+      width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 15px;
+      font-weight: 700; cursor: pointer; transition: 0.2s;
+    }
+    .btn-primary { background: #1e3a8a; color: #fff; }
+    .btn-primary:hover { background: #172554; }
+    .btn-success { background: #15803d; color: #fff; margin-top: 10px; }
+    .btn-warning { background: #d97706; color: #fff; margin-top: 10px; }
+
+    /* Main App */
+    #appScreen { display: none; padding-bottom: 40px; }
+    .topbar {
+      background: #1e293b; color: #fff; padding: 14px 18px; border-radius: 12px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+      border-bottom: 3px solid #f59e0b;
+    }
+    .topbar h1 { margin: 0; font-size: 18px; color: #fbbf24; }
+    .topbar p { margin: 2px 0 0; font-size: 12px; color: #cbd5e1; }
+    .card {
+      background: #ffffff; border-radius: 12px; padding: 18px; margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .card h3 {
+      margin: 0 0 14px; font-size: 16px; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+
+    /* Letterhead Preview & Print Styling */
+    .letterhead {
+      background: #fff; border: 2px solid #0f172a; padding: 24px; border-radius: 8px; color: #000;
+    }
+    .lh-header {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 3px solid #b45309; padding-bottom: 12px; margin-bottom: 14px;
+    }
+    .lh-title h2 { margin: 0; color: #0f172a; font-size: 24px; letter-spacing: 0.5px; }
+    .lh-title p { margin: 3px 0 0; font-size: 12px; color: #334155; font-weight: 600; }
+    .lh-contact { text-align: right; font-size: 12px; line-height: 1.5; color: #0f172a; }
+    .lh-badge {
+      background: #0f172a; color: #fbbf24; text-align: center; padding: 5px;
+      font-weight: 700; font-size: 14px; letter-spacing: 1px; margin-bottom: 14px;
+    }
+    .lh-meta {
+      display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 14px;
+      background: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;
+    }
+    table.q-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 13px; }
+    table.q-table th, table.q-table td { border: 1px solid #94a3b8; padding: 8px 10px; text-align: left; }
+    table.q-table th { background: #0f172a; color: #fff; }
+    .spec-box {
+      background: #fffbeb; border: 1px solid #f59e0b; padding: 12px; border-radius: 6px; margin-bottom: 14px;
+    }
+    .spec-box h4 { margin: 0 0 8px; color: #92400e; font-size: 14px; }
+    .spec-box ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6; }
+    .terms-box { font-size: 12px; line-height: 1.6; color: #334155; border-top: 1px dashed #94a3b8; padding-top: 10px; }
+    .lh-footer {
+      display: flex; justify-content: space-between; margin-top: 28px; font-size: 13px; font-weight: 700;
+    }
+
     @media print {
-      body * { visibility: hidden; }
-      #printArea, #printArea * { visibility: visible; }
-      #printArea {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        background: white !important;
-        padding: 15px !important;
-        box-shadow: none !important;
-      }
-      .no-print { display: none !important; }
+      body { background: #fff; }
+      #loginScreen, .topbar, .no-print { display: none !important; }
+      #appScreen { display: block !important; padding: 0; }
+      .container { max-width: 100%; padding: 0; }
+      .card { box-shadow: none; padding: 0; margin: 0; }
+      .letterhead { border: 2px solid #000; padding: 18px; }
+    }
+    @media (max-width: 600px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .lh-header, .lh-meta { flex-direction: column; text-align: left; gap: 6px; }
+      .lh-contact { text-align: left; }
     }
   </style>
 </head>
-<body class="text-slate-800 select-none">
+<body>
 
-  <!-- TOP HEADER -->
-  <header class="bg-slate-900 text-white px-4 py-3 sticky top-0 z-30 shadow-md flex items-center justify-between no-print">
-    <div class="flex items-center gap-2.5">
-      <div class="w-9 h-9 rounded-lg bg-amber-500 text-slate-950 font-extrabold flex items-center justify-center text-lg shadow">SF</div>
-      <div>
-        <h1 class="font-bold text-base leading-tight tracking-wide">Skyline FabPro</h1>
-        <p id="headerTrialBadge" class="text-[11px] text-amber-400 font-semibold">Free Trial: 3 Left</p>
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <div class="logo-box">SF</div>
+      <h2>Skyline FabPro માં સ્વાગત છે</h2>
+      <input type="text" id="loginName" placeholder="તમારું નામ (દા.ત. જયવીરભાઈ મકવાણા)" value="જયવીરભાઈ મકવાણા" />
+      <input type="tel" id="loginMobile" placeholder="મોબાઈલ નંબર" value="9106743538" />
+      <div id="otpSection" style="display:none;">
+        <input type="text" id="otpInput" placeholder="4 અંકનો OTP નાખો (દા.ત. 1234)" maxlength="4" />
       </div>
-    </div>
-    <!-- 3-LANGUAGE SWITCHER -->
-    <div class="flex bg-slate-800 rounded-lg p-0.5 border border-slate-700 text-xs font-bold">
-      <button onclick="setLang('gu')" id="btn-gu" class="px-2 py-1 rounded-md bg-amber-500 text-slate-950">ગુજ</button>
-      <button onclick="setLang('hi')" id="btn-hi" class="px-2 py-1 rounded-md text-slate-300">हिन्दी</button>
-      <button onclick="setLang('en')" id="btn-en" class="px-2 py-1 rounded-md text-slate-300">ENG</button>
-    </div>
-  </header>
-
-  <!-- LOGIN / OTP GATE MODAL -->
-  <div id="loginModal" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl">
-      <div class="text-center mb-5">
-        <div class="w-14 h-14 bg-amber-500 text-slate-950 font-black text-2xl rounded-2xl flex items-center justify-center mx-auto mb-2 shadow-lg">SF</div>
-        <h2 class="text-xl font-extrabold text-slate-900" data-t="loginTitle">Skyline FabPro માં સ્વાગત છે</h2>
-        <p class="text-xs text-slate-500 mt-1" data-t="loginSub">મોબાઈલ નંબર અને Email OTP વડે લૉગિન કરો (૩ ફ્રી ક્વોટેશન)</p>
-      </div>
-
-      <div id="step1Box" class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1" data-t="shopNameLbl">કંપની / વર્કશોપનું નામ *</label>
-          <input id="loginShop" type="text" placeholder="દા.ત. Skyline Fabrication" class="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amber-500" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1" data-t="mobileLbl">મોબાઈલ નંબર (10 અંક) *</label>
-          <input id="loginMobile" type="tel" maxlength="10" placeholder="9876543210" class="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amber-500" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1" data-t="emailLbl">Email ID *</label>
-          <input id="loginEmail" type="email" placeholder="name@gmail.com" class="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amber-500" />
-        </div>
-        <button onclick="sendOtp()" class="w-full bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold py-3 rounded-xl text-sm shadow-lg transition" data-t="sendOtpBtn">OTP મોકલો (Send OTP)</button>
-      </div>
-
-      <div id="step2Box" class="hidden space-y-3">
-        <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-center">
-          <p class="text-xs text-slate-700" data-t="otpSentMsg">તમારા મોબાઈલ અને ઈમેલ પર OTP મોકલવામાં આવ્યો છે:</p>
-          <p id="demoOtpDisplay" class="text-lg font-black text-slate-900 tracking-widest mt-1">OTP: 4829</p>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1" data-t="enterOtpLbl">4-અંકનો OTP દાખલ કરો *</label>
-          <input id="otpInput" type="number" maxlength="4" placeholder="4829" class="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-center text-lg font-bold tracking-widest focus:outline-none focus:border-amber-500" />
-        </div>
-        <button onclick="verifyOtp()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3 rounded-xl text-sm shadow-lg transition" data-t="verifyBtn">ચકાસો અને આગળ વધો</button>
-        <button onclick="resetLogin()" class="w-full text-xs text-slate-500 underline py-1" data-t="changeNumBtn">નંબર / Email બદલો</button>
-      </div>
+      <button class="btn btn-primary" id="loginBtn" onclick="handleLogin()">OTP મોકલો (Send OTP)</button>
     </div>
   </div>
 
-  <!-- PAYWALL MODAL (₹1,199/YEAR NON-REFUNDABLE) -->
-  <div id="paywallModal" class="fixed inset-0 bg-slate-950/95 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white w-full max-w-md rounded-2xl p-5 shadow-2xl my-auto">
-      <div class="flex justify-between items-start mb-3">
+  <!-- MAIN APP SCREEN -->
+  <div id="appScreen">
+    <div class="container">
+      <div class="topbar no-print">
         <div>
-          <span class="bg-red-100 text-red-700 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full">TRIAL COMPLETED (3/3)</span>
-          <h2 class="text-xl font-extrabold text-slate-900 mt-1" data-t="subTitle">Pro પ્લાન એક્ટિવેટ કરો</h2>
+          <h1>SKYLINE FABPRO</h1>
+          <p>Quotation &amp; PEB / Pipe Structure Designer</p>
         </div>
-        <button onclick="closePaywall()" class="text-slate-400 hover:text-slate-700 text-xl font-bold px-2">&times;</button>
+        <button onclick="logout()" style="background:#ef4444;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;">Logout</button>
       </div>
 
-      <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-4 mb-4 border border-amber-500/40">
-        <div class="flex justify-between items-center">
+      <!-- INPUT FORM -->
+      <div class="card no-print">
+        <h3>૧. પાર્ટી અને પ્રોજેક્ટની વિગત ભરો</h3>
+        <div class="grid-2">
           <div>
-            <p class="text-xs text-amber-400 font-bold uppercase">Annual Pro Membership</p>
-            <p class="text-3xl font-black mt-0.5">₹1,199 <span class="text-xs font-normal text-slate-300">/ Year</span></p>
-          </div>
-          <div class="text-right text-[11px] text-slate-300">
-            <p>✓ Unlimited PDF Quotes</p>
-            <p>✓ 2D Structure Designs</p>
-            <p>✓ 3 Languages Support</p>
-          </div>
-        </div>
-        <div class="mt-3 pt-2.5 border-t border-slate-700 text-[11px] text-red-300 font-semibold" data-t="nonRefundNote">
-          ⚠️ નોંધ: ₹1,199 વાર્ષિક સબ્સ્ક્રિપ્શન ફી સંપૂર્ણપણે Non-Refundable (પરત મળવાપાત્ર નથી) રહેશે.
-        </div>
-      </div>
-
-      <div class="space-y-3 text-xs">
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
-          <p class="font-bold text-slate-800 mb-1" data-t="payStep1">૧. UPI દ્વારા ₹1,199 પેમેન્ટ કરો:</p>
-          <p class="text-slate-600">UPI ID: <span class="font-mono font-bold text-slate-900 select-all">9106743538@ybl</span></p>
-          <p class="text-[11px] text-slate-500 mt-0.5">(GPay / PhonePe / Paytm પર ₹1,199 મોકલી 12-અંકનો UTR નંબર નીચે નાખો)</p>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1" data-t="utrLbl">UPI UTR / Transaction ID અથવા Activation Code:</label>
-          <input id="activationInput" type="text" placeholder="UTR નંબર અથવા Activation Code નાખો" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-bold uppercase focus:outline-none focus:border-amber-500" />
-        </div>
-
-        <button onclick="activateSubscription()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3 rounded-xl text-sm shadow-lg" data-t="activateBtn">પેમેન્ટ કન્ફર્મ કરી એકાઉન્ટ અનલોક કરો</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MAIN CONTENT AREA -->
-  <main class="max-w-xl mx-auto p-3.5 space-y-4">
-
-    <!-- TAB 1: NEW QUOTATION -->
-    <section id="tab-quote" class="space-y-3.5">
-      <!-- Client Info Card -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 space-y-3">
-        <div class="flex justify-between items-center">
-          <h2 class="font-extrabold text-sm text-slate-900 flex items-center gap-1.5" data-t="clientSec">👤 ગ્રાહકની વિગત (Client Details)</h2>
-          <span id="quoteNoBadge" class="text-[11px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">QT-101</span>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <input id="clientName" type="text" placeholder="ગ્રાહકનું નામ *" class="border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500" />
-          <input id="clientPhone" type="tel" placeholder="મોબાઈલ નંબર" class="border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500" />
-        </div>
-        <input id="clientAddress" type="text" placeholder="સાઈટનું સરનામું / શહેર" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500" />
-      </div>
-
-      <!-- Structure & Dimensions Card -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 space-y-3">
-        <h2 class="font-extrabold text-sm text-slate-900" data-t="workSec">🏗️ કામનો પ્રકાર અને માપ (Work & Size)</h2>
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1" data-t="catLbl">કેટેગરી</label>
-            <select id="workCategory" onchange="updateBlueprint()" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-sm font-semibold bg-white">
-              <option value="Industrial Shed">Industrial Shed (શેડ)</option>
-              <option value="Gazebo (Naliya / UPVC)">Gazebo (નળિયા / UPVC)</option>
-              <option value="Main Gate / Grill">Main Gate / Grill (ગેટ)</option>
-              <option value="Truss / Elevation">Truss / Elevation</option>
-              <option value="Staircase / Railing">Staircase / Railing</option>
-            </select>
+            <label>પાર્ટી / ગ્રાહકનું નામ</label>
+            <input type="text" id="partyName" placeholder="દા.ત. રાજેશભાઈ પટેલ" oninput="updateQuotation()" />
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1" data-t="scopeLbl">કામનો પ્રકાર</label>
-            <select id="workScope" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-sm font-semibold bg-white">
-              <option value="With Material (મટીરીયલ સાથે)">With Material (મટીરીયલ સાથે)</option>
-              <option value="Only Labour (માત્ર મજૂરી)">Only Labour (માત્ર મજૂરી)</option>
+            <label>પાર્ટી મોબાઈલ નંબર</label>
+            <input type="tel" id="partyMobile" placeholder="દા.ત. 9876543210" oninput="updateQuotation()" />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <label>સાઈટનું સરનામું (શહેર/વિસ્તાર)</label>
+            <input type="text" id="partyAddress" placeholder="દા.ત. કામરેજ, સુરત" oninput="updateQuotation()" />
+          </div>
+          <div>
+            <label>કામનો પ્રકાર (Work Type)</label>
+            <select id="workType" onchange="autoSuggestSpecs()">
+              <option value="gazebo_naliya">Gazebo (નળિયાવાળો ગઝેબો)</option>
+              <option value="gazebo_upvc">Gazebo (UPVC પતરાવાળો ગઝેબો)</option>
+              <option value="shed_ms">Industrial / Parking Shed (MS Pipe શેડ)</option>
+              <option value="peb_structure">PEB Heavy Structure (H-Beam / ISMB શેડ)</option>
             </select>
           </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid-3">
           <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">લંબાઈ (L - Ft)</label>
-            <input id="dimL" type="number" value="20" oninput="updateBlueprint()" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-sm font-bold text-center" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">પહોળાઈ (W - Ft)</label>
-            <input id="dimW" type="number" value="15" oninput="updateBlueprint()" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-sm font-bold text-center" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">ઊંચાઈ (H - Ft)</label>
-            <input id="dimH" type="number" value="10" oninput="updateBlueprint()" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-sm font-bold text-center" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Items & Calculator Card -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 space-y-3">
-        <div class="flex justify-between items-center">
-          <h2 class="font-extrabold text-sm text-slate-900" data-t="itemsSec">🧮 ભાવ અને વજન ગણતરી (Items)</h2>
-          <button onclick="addItemRow()" class="bg-slate-900 text-amber-400 text-xs font-bold px-3 py-1.5 rounded-lg">+ આઈટમ ઉમેરો</button>
-        </div>
-
-        <div id="itemsContainer" class="space-y-2.5"></div>
-
-        <!-- GST & Discount -->
-        <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-slate-100">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">GST %</label>
-            <select id="gstRate" onchange="recalcTotals()" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-sm font-bold bg-white">
-              <option value="0">No GST (0%)</option>
-              <option value="18">GST 18%</option>
+            <label>મટીરીયલ પ્રકાર (Scope)</label>
+            <select id="materialMode" onchange="autoSuggestSpecs()">
+              <option value="with_material">With Material (મટીરીયલ સાથે)</option>
+              <option value="labor_only">Only Labor (ફક્ત મજૂરી)</option>
             </select>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">એડવાન્સ પેમેન્ટ (%)</label>
-            <input id="advancePct" type="number" value="50" onchange="recalcTotals()" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-sm font-bold" />
+            <label>લંબાઈ (Length - ફૂટમાં)</label>
+            <input type="number" id="lengthFt" value="15" min="1" oninput="autoSuggestSpecs()" />
+          </div>
+          <div>
+            <label>પહોળાઈ (Width - ફૂટમાં)</label>
+            <input type="number" id="widthFt" value="15" min="1" oninput="autoSuggestSpecs()" />
           </div>
         </div>
 
-        <!-- Live Summary Box -->
-        <div class="bg-slate-900 text-white rounded-xl p-3.5 space-y-1.5">
-          <div class="flex justify-between text-xs text-slate-300">
-            <span>Subtotal (મૂળ રકમ):</span>
-            <span id="subTotalTxt" class="font-bold">₹0</span>
+        <div class="grid-3">
+          <div>
+            <label>કુલ ચોરસ ફૂટ (Total Sq.Ft)</label>
+            <input type="number" id="totalSqft" value="225" oninput="updateQuotation()" />
           </div>
-          <div class="flex justify-between text-xs text-slate-300">
-            <span>GST Amount:</span>
-            <span id="gstTxt" class="font-bold">₹0</span>
+          <div>
+            <label>ભાવ પ્રતિ ચો.ફૂટ (Rate ₹/Sq.Ft)</label>
+            <input type="number" id="rateSqft" value="410" oninput="updateQuotation()" />
           </div>
-          <div class="flex justify-between text-base font-black text-amber-400 pt-1.5 border-t border-slate-700">
-            <span>કુલ અંદાજિત રકમ (Grand Total):</span>
-            <span id="grandTotalTxt">₹0</span>
-          </div>
-        </div>
-
-        <button onclick="generateFinalQuotation()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold py-3.5 rounded-xl text-sm shadow-lg transition" data-t="genBtn">
-          📄 ક્વોટેશન PDF અને 2D ડિઝાઇન તૈયાર કરો
-        </button>
-      </div>
-    </section>
-
-    <!-- TAB 2: 2D STRUCTURE DESIGN -->
-    <section id="tab-design" class="hidden space-y-3.5">
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
-        <div class="flex justify-between items-center">
-          <h2 class="font-extrabold text-sm text-slate-900">📐 2D Structure Blueprint Preview</h2>
-          <span id="blueprintAreaBadge" class="bg-amber-100 text-amber-800 text-xs font-extrabold px-2.5 py-1 rounded-lg">300 Sq.Ft.</span>
-        </div>
-        <p class="text-xs text-slate-500">ક્લાયન્ટને સાઈટ પર બતાવવા માટે માપ સાથેનો 2D નકશો (આ નકશો તમારા PDF ક્વોટેશનમાં પણ ઓટોમેટિક જોડાઈ જશે).</p>
-        
-        <div class="bg-slate-950 rounded-xl p-3 border-2 border-slate-800 flex justify-center">
-          <svg id="blueprintSvg" viewBox="0 0 360 240" class="w-full h-auto max-h-64"></svg>
-        </div>
-
-        <div class="grid grid-cols-3 gap-2 text-center text-xs">
-          <div class="bg-slate-100 p-2 rounded-xl">
-            <p class="text-slate-500">Length</p>
-            <p id="bpL" class="font-extrabold text-slate-900">20 Ft</p>
-          </div>
-          <div class="bg-slate-100 p-2 rounded-xl">
-            <p class="text-slate-500">Width</p>
-            <p id="bpW" class="font-extrabold text-slate-900">15 Ft</p>
-          </div>
-          <div class="bg-slate-100 p-2 rounded-xl">
-            <p class="text-slate-500">Height</p>
-            <p id="bpH" class="font-extrabold text-slate-900">10 Ft</p>
+          <div>
+            <label>કુલ અંદાજિત રકમ (Total ₹)</label>
+            <input type="text" id="totalAmountDisplay" readonly style="background:#e2e8f0;font-weight:700;" />
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- TAB 3: SAVED QUOTATIONS & PRINTABLE PDF PREVIEW -->
-    <section id="tab-history" class="hidden space-y-3.5">
-      <!-- Printable Quotation Sheet -->
-      <div id="printArea" class="bg-white rounded-2xl p-4 shadow-md border border-slate-200 space-y-3">
-        <div class="border-b-2 border-slate-900 pb-3 flex justify-between items-start">
+      <!-- PIPE / PEB COLUMN SPECIFICATIONS -->
+      <div class="card no-print" id="specCard">
+        <h3>૨. મટીરીયલ સ્પેસિફિકેશન (Pipe / PEB Column ના માપ - ઓટો સજેસ્ટ)</h3>
+        <div class="grid-2">
           <div>
-            <h2 id="pdfShopName" class="text-lg font-black text-slate-900 uppercase">SKYLINE FABRICATION</h2>
-            <p id="pdfShopTag" class="text-[11px] text-slate-600 font-semibold">Industrial Shed, Gazebo & Structural Fabrication Works</p>
-            <p id="pdfShopContact" class="text-[11px] text-slate-700 mt-0.5">📞 9106743538 | Gujarat</p>
+            <label>મેઈન કોલમ / થાંભલા (Main Column Size)</label>
+            <input type="text" id="colSize" oninput="updateQuotation()" />
           </div>
-          <div class="text-right">
-            <span class="bg-slate-900 text-amber-400 text-[11px] font-extrabold px-2.5 py-1 rounded">QUOTATION</span>
-            <p id="pdfDate" class="text-[11px] text-slate-600 mt-1">Date: 24/11/2026</p>
-            <p id="pdfQuoteId" class="text-[11px] font-bold text-slate-800">No: QT-101</p>
+          <div>
+            <label>ટ્રસ / રાફ્ટર / કાંચી (Rafter / Truss Pipe)</label>
+            <input type="text" id="rafterSize" oninput="updateQuotation()" />
           </div>
         </div>
-
-        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs flex justify-between">
+        <div class="grid-2">
           <div>
-            <p class="text-[10px] text-slate-500 uppercase font-bold">To (Client):</p>
-            <p id="pdfClientName" class="font-extrabold text-slate-900">Client Name</p>
-            <p id="pdfClientAddr" class="text-slate-600">Site Address</p>
+            <label>પર્લિન / આડા પાઈપ (Purlin Size)</label>
+            <input type="text" id="purlinSize" oninput="updateQuotation()" />
           </div>
-          <div class="text-right">
-            <p class="text-[10px] text-slate-500 uppercase font-bold">Work Type:</p>
-            <p id="pdfWorkType" class="font-bold text-slate-900">Industrial Shed</p>
-            <p id="pdfWorkSize" class="text-slate-600">20 × 15 × 10 Ft</p>
+          <div>
+            <label>બેઝ પ્લેટ અને રૂફિંગ (Base Plate &amp; Roofing)</label>
+            <input type="text" id="roofSize" oninput="updateQuotation()" />
           </div>
         </div>
+      </div>
 
-        <!-- Items Table -->
-        <table class="w-full text-xs border-collapse">
-          <thead>
-            <tr class="bg-slate-900 text-white text-left">
-              <th class="p-2 rounded-tl-lg">વિગત (Description)</th>
-              <th class="p-2 text-center">Qty/Unit</th>
-              <th class="p-2 text-right">Rate</th>
-              <th class="p-2 text-right rounded-tr-lg">Amount</th>
-            </tr>
-          </thead>
-          <tbody id="pdfItemsBody" class="divide-y divide-slate-200"></tbody>
-        </table>
+      <!-- OFFICIAL LETTERHEAD PREVIEW -->
+      <div class="card">
+        <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h3 style="margin:0;border:none;padding:0;">૩. ઓફિશિયલ લેટરહેડ કોટેશન પ્રિવ્યુ</h3>
+          <button class="btn btn-success" style="width:auto;padding:10px 18px;margin:0;" onclick="downloadPDF()">📄 PDF ડાઉનલોડ / પ્રિન્ટ કરો</button>
+        </div>
 
-        <!-- Totals -->
-        <div class="flex justify-end">
-          <div class="w-56 text-xs space-y-1 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-            <div class="flex justify-between"><span>Subtotal:</span><span id="pdfSub" class="font-bold">₹0</span></div>
-            <div class="flex justify-between"><span>GST:</span><span id="pdfGst" class="font-bold">₹0</span></div>
-            <div class="flex justify-between text-sm font-black text-slate-900 pt-1 border-t border-slate-300">
-              <span>Total:</span><span id="pdfTotal">₹0</span>
+        <div class="letterhead" id="letterheadArea">
+          <div class="lh-header">
+            <div class="lh-title">
+              <h2>SKYLINE FABRICATION</h2>
+              <p>Industrial Sheds • PEB Structures • Designer Gazebos &amp; All MS/SS Work</p>
+            </div>
+            <div class="lh-contact">
+              <strong>જયવીરભાઈ મકવાણા</strong><br />
+              📞 મો: +91 91067 43538<br />
+              📍 સુરત, ગુજરાત
+            </div>
+          </div>
+
+          <div class="lh-badge">QUOTATION / ESTIMATE</div>
+
+          <div class="lh-meta">
+            <div>
+              <strong>પ્રતિ શ્રી (To):</strong> <span id="outPartyName">માનનીય ગ્રાહકશ્રી</span><br />
+              <strong>મોબાઈલ:</strong> <span id="outPartyMobile">-</span><br />
+              <strong>સાઈટ સરનામું:</strong> <span id="outPartyAddress">-</span>
+            </div>
+            <div style="text-align:right;">
+              <strong>કોટેશન નં:</strong> <span id="outQuoteNo">SF-2026-01</span><br />
+              <strong>તારીખ:</strong> <span id="outDate"></span><br />
+              <strong>કામનો પ્રકાર:</strong> <span id="outScopeBadge">With Material</span>
+            </div>
+          </div>
+
+          <table class="q-table">
+            <thead>
+              <tr>
+                <th style="width:8%;">ક્રમ</th>
+                <th style="width:44%;">કામની વિગત (Description)</th>
+                <th style="width:16%;">માપ (Sq.Ft)</th>
+                <th style="width:16%;">ભાવ (₹/Sq.Ft)</th>
+                <th style="width:16%;">કુલ રકમ (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>
+                  <strong id="outWorkTitle">Gazebo (નળિયાવાળો ગઝેબો)</strong><br />
+                  <small id="outDimensions">સાઈઝ: 15 ફૂટ × 15 ફૂટ</small>
+                </td>
+                <td id="outSqft">225</td>
+                <td id="outRate">₹ 410</td>
+                <td><strong id="outTotal">₹ 92,250</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- MATERIAL & COLUMN SPECS IN LETTERHEAD -->
+          <div class="spec-box" id="outSpecSection">
+            <h4>મટીરીયલ અને સ્ટ્રક્ચરના ચોક્કસ માપ (Material &amp; Column Specifications):</h4>
+            <ul>
+              <li><strong>મેઈન કોલમ (Main Column):</strong> <span id="outCol"></span></li>
+              <li><strong>રાફ્ટર / ટ્રસ (Rafter / Truss):</strong> <span id="outRafter"></span></li>
+              <li><strong>પર્લિન / આડા પાઈપ (Purlin):</strong> <span id="outPurlin"></span></li>
+              <li><strong>બેઝ પ્લેટ અને રૂફિંગ (Roofing &amp; Finish):</strong> <span id="outRoof"></span></li>
+            </ul>
+          </div>
+
+          <div class="terms-box">
+            <strong>નિયમો અને શરતો (Terms &amp; Conditions):</strong><br />
+            ૧. કોલમ ઉભા કરવા માટેના સિવિલ / RCC ફાઉન્ડેશન ખાડા તથા કોંક્રીટનું કામ પાર્ટી તરફથી રહેશે.<br />
+            ૨. સાઈટ પર વેલ્ડિંગ માટે ઈલેક્ટ્રીક પાવર (લાઈટ) અને પાણીની વ્યવસ્થા પાર્ટીએ કરી આપવાની રહેશે.<br />
+            ૩. લોખંડના સ્ટ્રક્ચર પર એક કોટ રેડ ઓક્સાઈડ પ્રાઈમર અને બે કોટ કલર કામ (With Material માં) સામેલ છે.<br />
+            ૪. પેમેન્ટ શરતો: ૫૦% એડવાન્સ ઓર્ડર સાથે, ૪૦% મટીરીયલ સાઈટ પર આવ્યા બાદ અને ૧૦% કામ પૂર્ણ થયે ચૂકવવાના રહેશે.<br />
+            ૫. આ કોટેશનની માન્યતા ૧૫ દિવસ સુધી રહેશે (GST અલગથી લાગુ પડશે).
+          </div>
+
+          <div class="lh-footer">
+            <div>ગ્રાહકની સહી (Customer Sign)</div>
+            <div style="text-align:right;">
+              For, SKYLINE FABRICATION<br />
+              <span style="font-size:12px;font-weight:normal;">(જયવીરભાઈ મકવાણા)</span>
             </div>
           </div>
         </div>
 
-        <!-- Mini 2D Sketch in PDF -->
-        <div class="border border-slate-200 rounded-xl p-2 bg-slate-950">
-          <p class="text-[10px] text-amber-400 font-bold mb-1">2D STRUCTURE LAYOUT:</p>
-          <svg id="pdfBlueprintSvg" viewBox="0 0 360 150" class="w-full h-28"></svg>
-        </div>
-
-        <!-- Mandatory Extra Work Terms & Conditions -->
-        <div class="bg-amber-50 border border-amber-300 rounded-xl p-2.5 text-[11px] text-slate-800 space-y-1">
-          <p class="font-extrabold text-slate-900">નિયમો અને શરતો (Terms & Conditions):</p>
-          <p id="pdfTermsText" class="leading-relaxed font-medium">
-            ૧. નક્કી થયેલા માપ અને કામ સિવાય કોઈ પણ વધારાની વસ્તુ કે એક્સ્ટ્રા કામ આવશે તો તેનો ચાર્જ અલગથી (Extra) લેવામાં આવશે.<br/>
-            ૨. RCC, સિવિલ કામ અને લાઈટ/પાણીની સુવિધા પાર્ટીની રહેશે.<br/>
-            ૩. ઓર્ડર કન્ફર્મ કરતી વખતે ૫૦% એડવાન્સ પેમેન્ટ આપવાનું રહેશે.
-          </p>
-        </div>
+        <button class="btn btn-warning no-print" onclick="downloadPDF()">🖨️ Save as PDF / Print Letterhead</button>
       </div>
-
-      <!-- Action Buttons -->
-      <div class="grid grid-cols-2 gap-2.5 no-print">
-        <button onclick="window.print()" class="bg-slate-900 text-white font-bold py-3 rounded-xl text-xs shadow">🖨️ PDF ડાઉનલોડ / Print</button>
-        <button onclick="shareWhatsApp()" class="bg-emerald-600 text-white font-bold py-3 rounded-xl text-xs shadow">📲 WhatsApp પર મોકલો</button>
-      </div>
-
-      <!-- Saved List -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 no-print">
-        <h3 class="font-extrabold text-xs text-slate-700 uppercase mb-2">સેવ થયેલા ક્વોટેશન (History)</h3>
-        <div id="historyList" class="space-y-2 text-xs"></div>
-      </div>
-    </section>
-
-    <!-- TAB 4: PROFILE & ₹1,199 PLAN -->
-    <section id="tab-profile" class="hidden space-y-3.5">
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
-        <h2 class="font-extrabold text-sm text-slate-900">🏢 તમારી કંપનીની પ્રોફાઇલ (Letterhead)</h2>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-500 mb-1">કંપની / વર્કશોપનું નામ</label>
-          <input id="profShopName" type="text" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold" />
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-500 mb-1">કામની વિગત (Tagline)</label>
-          <input id="profTagline" type="text" value="Industrial Shed, Gazebo & Structural Fabrication Works" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm" />
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">મોબાઈલ નંબર</label>
-            <input id="profMobile" type="tel" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold" />
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-500 mb-1">શહેર / GST નંબર</label>
-            <input id="profCity" type="text" value="Surat, Gujarat" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm" />
-          </div>
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-500 mb-1">Terms & Conditions (વધારાના કામનો ચાર્જ)</label>
-          <textarea id="profTerms" rows="3" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs">૧. નક્કી થયેલા માપ અને કામ સિવાય કોઈ પણ વધારાની વસ્તુ કે એક્સ્ટ્રા કામ આવશે તો તેનો ચાર્જ અલગથી (Extra) લેવામાં આવશે.
-૨. RCC, સિવિલ કામ અને લાઈટ/પાણીની સુવિધા પાર્ટીની રહેશે.</textarea>
-        </div>
-        <button onclick="saveProfile()" class="w-full bg-slate-900 text-amber-400 font-bold py-2.5 rounded-xl text-xs">પ્રોફાઇલ સેવ કરો</button>
-      </div>
-
-      <!-- Subscription Status Card -->
-      <div class="bg-slate-900 text-white rounded-2xl p-4 space-y-2">
-        <div class="flex justify-between items-center">
-          <span class="text-xs text-amber-400 font-bold">MEMBERSHIP STATUS</span>
-          <span id="planStatusBadge" class="bg-amber-500 text-slate-950 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full">FREE TRIAL</span>
-        </div>
-        <p id="planDetailsTxt" class="text-xs text-slate-300">તમારી પાસે 3 ફ્રી ક્વોટેશન બાકી છે. ત્યારબાદ ₹1,199/વર્ષ (Non-Refundable).</p>
-        <button onclick="openPaywall()" class="w-full bg-amber-500 text-slate-950 font-extrabold py-2.5 rounded-xl text-xs mt-1">₹1,199/Year Pro પ્લાન અપગ્રેડ કરો</button>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- BOTTOM NAVIGATION BAR -->
-  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 z-30 flex justify-around py-2 px-1 shadow-lg no-print">
-    <button onclick="switchTab('quote')" id="nav-quote" class="flex flex-col items-center text-amber-600 font-extrabold text-[11px]">
-      <span class="text-lg">📝</span><span>ક્વોટેશન</span>
-    </button>
-    <button onclick="switchTab('design')" id="nav-design" class="flex flex-col items-center text-slate-500 font-bold text-[11px]">
-      <span class="text-lg">📐</span><span>2D ડિઝાઇન</span>
-    </button>
-    <button onclick="switchTab('history')" id="nav-history" class="flex flex-col items-center text-slate-500 font-bold text-[11px]">
-      <span class="text-lg">📄</span><span>PDF / હિસ્ટ્રી</span>
-    </button>
-    <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center text-slate-500 font-bold text-[11px]">
-      <span class="text-lg">⚙️</span><span>પ્રોફાઇલ / ₹1199</span>
-    </button>
-  </nav>
+    </div>
+  </div>
 
   <script>
-    // --- TRANSLATIONS (GUJARATI, HINDI, ENGLISH) ---
-    const I18N = {
-      gu: {
-        loginTitle: "Skyline FabPro માં સ્વાગત છે",
-        loginSub: "મોબાઈલ નંબર અને Email OTP વડે લૉગિન કરો (૩ ફ્રી ક્વોટેશન)",
-        shopNameLbl: "કંપની / વર્કશોપનું નામ *",
-        mobileLbl: "મોબાઈલ નંબર (10 અંક) *",
-        emailLbl: "Email ID *",
-        sendOtpBtn: "OTP મોકલો (Send OTP)",
-        otpSentMsg: "તમારા મોબાઈલ અને ઈમેલ પર OTP મોકલવામાં આવ્યો છે:",
-        enterOtpLbl: "4-અંકનો OTP દાખલ કરો *",
-        verifyBtn: "ચકાસો અને આગળ વધો",
-        changeNumBtn: "નંબર / Email બદલો",
-        subTitle: "Pro પ્લાન એક્ટિવેટ કરો",
-        nonRefundNote: "⚠️ નોંધ: ₹1,199 વાર્ષિક સબ્સ્ક્રિપ્શન ફી સંપૂર્ણપણે Non-Refundable (પરત મળવાપાત્ર નથી) રહેશે.",
-        payStep1: "૧. UPI દ્વારા ₹1,199 પેમેન્ટ કરો:",
-        utrLbl: "UPI UTR / Transaction ID અથવા Activation Code:",
-        activateBtn: "પેમેન્ટ કન્ફર્મ કરી એકાઉન્ટ અનલોક કરો",
-        clientSec: "👤 ગ્રાહકની વિગત (Client Details)",
-        workSec: "🏗️ કામનો પ્રકાર અને માપ (Work & Size)",
-        itemsSec: "🧮 ભાવ અને વજન ગણતરી (Items)",
-        genBtn: "📄 ક્વોટેશન PDF અને 2D ડિઝાઇન તૈયાર કરો",
-        defaultTerms: "૧. નક્કી થયેલા માપ અને કામ સિવાય કોઈ પણ વધારાની વસ્તુ કે એક્સ્ટ્રા કામ આવશે તો તેનો ચાર્જ અલગથી (Extra) લેવામાં આવશે.\n૨. RCC, સિવિલ કામ અને લાઈટ/પાણીની સુવિધા પાર્ટીની રહેશે."
-      },
-      hi: {
-        loginTitle: "Skyline FabPro में स्वागत है",
-        loginSub: "मोबाइल नंबर और Email OTP से लॉगिन करें (3 फ्री कोटेशन)",
-        shopNameLbl: "कंपनी / वर्कशॉप का नाम *",
-        mobileLbl: "मोबाइल नंबर (10 अंक) *",
-        emailLbl: "Email ID *",
-        sendOtpBtn: "OTP भेजें (Send OTP)",
-        otpSentMsg: "आपके मोबाइल और ईमेल पर OTP भेजा गया है:",
-        enterOtpLbl: "4-अंकों का OTP दर्ज करें *",
-        verifyBtn: "सत्यापित करें और आगे बढ़ें",
-        changeNumBtn: "नंबर / Email बदलें",
-        subTitle: "Pro प्लान एक्टिवेट करें",
-        nonRefundNote: "⚠️ नोट: ₹1,199 वार्षिक सब्सक्रिप्शन शुल्क पूरी तरह से Non-Refundable (वापस नहीं होगा) रहेगा।",
-        payStep1: "१. UPI द्वारा ₹1,199 भुगतान करें:",
-        utrLbl: "UPI UTR / Transaction ID या Activation Code:",
-        activateBtn: "भुगतान कन्फर्म करके अकाउंट अनलॉक करें",
-        clientSec: "👤 ग्राहक का विवरण (Client Details)",
-        workSec: "🏗️ काम का प्रकार और माप (Work & Size)",
-        itemsSec: "🧮 दर और वजन गणना (Items)",
-        genBtn: "📄 कोटेशन PDF और 2D डिज़ाइन तैयार करें",
-        defaultTerms: "१. तय किए गए माप और काम के अलावा कोई भी अतिरिक्त वस्तु या एक्स्ट्रा काम आने पर उसका चार्ज अलग से (Extra) लिया जाएगा।\n२. RCC, सिविल कार्य और बिजली/पानी की सुविधा पार्टी की रहेगी।"
-      },
-      en: {
-        loginTitle: "Welcome to Skyline FabPro",
-        loginSub: "Login with Mobile Number & Email OTP (3 Free Quotations)",
-        shopNameLbl: "Company / Workshop Name *",
-        mobileLbl: "Mobile Number (10 Digits) *",
-        emailLbl: "Email ID *",
-        sendOtpBtn: "Send OTP",
-        otpSentMsg: "OTP has been sent to your Mobile & Email:",
-        enterOtpLbl: "Enter 4-Digit OTP *",
-        verifyBtn: "Verify & Continue",
-        changeNumBtn: "Change Number / Email",
-        subTitle: "Activate Pro Plan",
-        nonRefundNote: "⚠️ Note: ₹1,199 Annual Subscription fee is strictly Non-Refundable once activated.",
-        payStep1: "1. Pay ₹1,199 via UPI:",
-        utrLbl: "UPI UTR / Transaction ID or Activation Code:",
-        activateBtn: "Confirm Payment & Unlock Account",
-        clientSec: "👤 Client Details",
-        workSec: "🏗️ Work Type & Dimensions",
-        itemsSec: "🧮 Rate & Weight Calculation (Items)",
-        genBtn: "📄 Generate Quotation PDF & 2D Design",
-        defaultTerms: "1. Any additional items or extra work beyond the agreed measurements and scope will be charged extra.\n2. RCC, civil work, and electricity/water supply will be borne by the client."
-      }
-    };
+    let otpSent = false;
 
-    let currentLang = 'gu';
-    let generatedOtp = '';
-    let state = JSON.parse(localStorage.getItem('skyline_fabpro_v1')) || {
-      loggedIn: false,
-      shopName: 'Skyline Fabrication',
-      tagline: 'Industrial Shed, Gazebo & Structural Fabrication Works',
-      mobile: '9106743538',
-      email: '',
-      city: 'Gujarat',
-      terms: I18N.gu.defaultTerms,
-      quotesUsed: 0,
-      isPro: false,
-      history: []
-    };
-
-    function saveState() {
-      localStorage.setItem('skyline_fabpro_v1', JSON.stringify(state));
-      updateUIState();
-    }
-
-    function setLang(lang) {
-      currentLang = lang;
-      ['gu', 'hi', 'en'].forEach(l => {
-        const btn = document.getElementById('btn-' + l);
-        btn.className = l === lang
-          ? 'px-2 py-1 rounded-md bg-amber-500 text-slate-950'
-          : 'px-2 py-1 rounded-md text-slate-300';
-      });
-      document.querySelectorAll('[data-t]').forEach(el => {
-        const key = el.getAttribute('data-t');
-        if (I18N[lang][key]) el.innerText = I18N[lang][key];
-      });
-      document.getElementById('profTerms').value = I18N[lang].defaultTerms;
-      state.terms = I18N[lang].defaultTerms;
-      saveState();
-    }
-
-    // --- OTP LOGIN ---
-    function sendOtp() {
-      const shop = document.getElementById('loginShop').value.trim();
-      const mob = document.getElementById('loginMobile').value.trim();
-      const email = document.getElementById('loginEmail').value.trim();
-      if (!shop || mob.length < 10 || !email.includes('@')) {
-        alert('કૃપા કરીને કંપનીનું નામ, 10-અંકનો મોબાઈલ નંબર અને સાચું Email ID નાખો.');
-        return;
-      }
-      generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
-      document.getElementById('demoOtpDisplay').innerText = 'OTP: ' + generatedOtp;
-      document.getElementById('step1Box').classList.add('hidden');
-      document.getElementById('step2Box').classList.remove('hidden');
-    }
-
-    function verifyOtp() {
-      const entered = document.getElementById('otpInput').value.trim();
-      if (entered === generatedOtp || entered === '1234') {
-        state.loggedIn = true;
-        state.shopName = document.getElementById('loginShop').value.trim();
-        state.mobile = document.getElementById('loginMobile').value.trim();
-        state.email = document.getElementById('loginEmail').value.trim();
-        saveState();
-        document.getElementById('loginModal').classList.add('hidden');
+    function handleLogin() {
+      const btn = document.getElementById('loginBtn');
+      const otpSec = document.getElementById('otpSection');
+      if (!otpSent) {
+        otpSec.style.display = 'block';
+        btn.innerText = 'Verify OTP & Enter App';
+        otpSent = true;
+        alert('તમારો ડેમો OTP: 1234 છે (કોઈપણ 4 અંક નાખીને આગળ વધો)');
       } else {
-        alert('ખોટો OTP! કૃપા કરીને સાચો OTP નાખો.');
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('appScreen').style.display = 'block';
+        initApp();
       }
     }
 
-    function resetLogin() {
-      document.getElementById('step2Box').classList.add('hidden');
-      document.getElementById('step1Box').classList.remove('hidden');
+    function logout() {
+      document.getElementById('appScreen').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'flex';
     }
 
-    // --- PAYWALL & ACTIVATION ---
-    function openPaywall() {
-      document.getElementById('paywallModal').classList.remove('hidden');
+    function initApp() {
+      const today = new Date();
+      document.getElementById('outDate').innerText = today.toLocaleDateString('en-IN');
+      document.getElementById('outQuoteNo').innerText = 'SF-' + today.getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
+      autoSuggestSpecs();
     }
-    function closePaywall() {
-      document.getElementById('paywallModal').classList.add('hidden');
-    }
-    function activateSubscription() {
-      const code = document.getElementById('activationInput').value.trim().toUpperCase();
-      // Master Admin Code: SKYLINE2026 or any valid 12-digit UPI UTR
-      if (code === 'SKYLINE2026' || code.length >= 10) {
-        state.isPro = true;
-        saveState();
-        closePaywall();
-        alert('🎉 અભિનંદન! તમારો Pro Annual Plan (₹1,199/Year) એક્ટિવેટ થઈ ગયો છે.');
+
+    function autoSuggestSpecs() {
+      const workType = document.getElementById('workType').value;
+      const mode = document.getElementById('materialMode').value;
+      const L = parseFloat(document.getElementById('lengthFt').value) || 0;
+      const W = parseFloat(document.getElementById('widthFt').value) || 0;
+      const maxSpan = Math.max(L, W);
+
+      // Calculate SqFt
+      const sqft = Math.round(L * W);
+      document.getElementById('totalSqft').value = sqft;
+
+      // Default Rates
+      let rate = 410;
+      if (mode === 'with_material') {
+        if (workType === 'gazebo_naliya') rate = 410;
+        else if (workType === 'gazebo_upvc') rate = 380;
+        else if (workType === 'shed_ms') rate = 110;
+        else if (workType === 'peb_structure') rate = 165;
       } else {
-        alert('કૃપા કરીને માન્ય 12-અંકનો UPI UTR નંબર અથવા Activation Code નાખો.');
+        if (workType === 'gazebo_naliya') rate = 70;
+        else if (workType === 'gazebo_upvc') rate = 50;
+        else if (workType === 'shed_ms') rate = 25;
+        else if (workType === 'peb_structure') rate = 35;
       }
-    }
+      document.getElementById('rateSqft').value = rate;
 
-    // --- ITEMS CALCULATOR ---
-    let items = [
-      { desc: 'MS Structure & Shed / Gazebo Work', qty: 300, unit: 'Sq.Ft', rate: 50 }
-    ];
+      // Auto-Suggest Pipe / PEB Column Sizes based on Span
+      let col = '', rafter = '', purlin = '', roof = '';
 
-    function renderItems() {
-      const box = document.getElementById('itemsContainer');
-      box.innerHTML = '';
-      items.forEach((it, idx) => {
-        const row = document.createElement('div');
-        row.className = 'bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-2';
-        row.innerHTML = `
-          <div class="flex gap-2">
-            <input type="text" value="${it.desc}" onchange="items[${idx}].desc=this.value" placeholder="કામની વિગત (દા.ત. MS Pipe / Sheet)" class="flex-1 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold bg-white" />
-            ${items.length > 1 ? `<button onclick="removeItem(${idx})" class="text-red-500 font-bold px-2">✕</button>` : ''}
-          </div>
-          <div class="grid grid-cols-3 gap-2">
-            <input type="number" value="${it.qty}" oninput="items[${idx}].qty=parseFloat(this.value)||0; recalcTotals()" placeholder="Qty" class="border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-bold bg-white text-center" />
-            <select onchange="items[${idx}].unit=this.value" class="border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-bold bg-white">
-              <option value="Sq.Ft" ${it.unit==='Sq.Ft'?'selected':''}>Sq.Ft.</option>
-              <option value="KG" ${it.unit==='KG'?'selected':''}>KG (વજન)</option>
-              <option value="Nos" ${it.unit==='Nos'?'selected':''}>Nos (નંગ)</option>
-              <option value="R.Ft" ${it.unit==='R.Ft'?'selected':''}>Running Ft</option>
-            </select>
-            <input type="number" value="${it.rate}" oninput="items[${idx}].rate=parseFloat(this.value)||0; recalcTotals()" placeholder="Rate ₹" class="border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-bold bg-white text-right" />
-          </div>
-        `;
-        box.appendChild(row);
-      });
-      recalcTotals();
-    }
-
-    function addItemRow() {
-      items.push({ desc: 'Primer & Colour / Extra Fitting', qty: 1, unit: 'Nos', rate: 2500 });
-      renderItems();
-    }
-    function removeItem(i) {
-      items.splice(i, 1);
-      renderItems();
-    }
-
-    function recalcTotals() {
-      const sub = items.reduce((sum, it) => sum + (it.qty * it.rate), 0);
-      const gstPct = parseFloat(document.getElementById('gstRate').value) || 0;
-      const gstAmt = Math.round(sub * gstPct / 100);
-      const grand = sub + gstAmt;
-
-      document.getElementById('subTotalTxt').innerText = '₹' + sub.toLocaleString('en-IN');
-      document.getElementById('gstTxt').innerText = '₹' + gstAmt.toLocaleString('en-IN');
-      document.getElementById('grandTotalTxt').innerText = '₹' + grand.toLocaleString('en-IN');
-      return { sub, gstAmt, grand };
-    }
-
-    // --- 2D BLUEPRINT GENERATOR ---
-    function updateBlueprint() {
-      const L = parseFloat(document.getElementById('dimL').value) || 20;
-      const W = parseFloat(document.getElementById('dimW').value) || 15;
-      const H = parseFloat(document.getElementById('dimH').value) || 10;
-      const cat = document.getElementById('workCategory').value;
-      const area = Math.round(L * W);
-
-      document.getElementById('blueprintAreaBadge').innerText = area + ' Sq.Ft.';
-      document.getElementById('bpL').innerText = L + ' Ft';
-      document.getElementById('bpW').innerText = W + ' Ft';
-      document.getElementById('bpH').innerText = H + ' Ft';
-
-      // Auto-sync first item qty if Sq.Ft
-      if (items[0] && items[0].unit === 'Sq.Ft') {
-        items[0].qty = area;
-        renderItems();
-      }
-
-      const svgMarkup = `
-        <defs>
-          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="1"/>
-          </pattern>
-        </defs>
-        <rect width="360" height="240" fill="url(#grid)" />
-        <!-- Isometric / 2D Elevation Structure -->
-        <polygon points="60,90 180,35 300,90" fill="none" stroke="#f59e0b" stroke-width="3"/>
-        <line x1="180" y1="35" x2="180" y2="90" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4"/>
-        <line x1="120" y1="62" x2="120" y2="90" stroke="#f59e0b" stroke-width="1.5"/>
-        <line x1="240" y1="62" x2="240" y2="90" stroke="#f59e0b" stroke-width="1.5"/>
-        <!-- Columns -->
-        <line x1="70" y1="90" x2="70" y2="190" stroke="#38bdf8" stroke-width="4"/>
-        <line x1="290" y1="90" x2="290" y2="190" stroke="#38bdf8" stroke-width="4"/>
-        <!-- Base -->
-        <line x1="50" y1="190" x2="310" y2="190" stroke="#94a3b8" stroke-width="2"/>
-        <!-- Dimension Labels -->
-        <text x="180" y="212" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">Length: ${L} Ft × Width: ${W} Ft (${area} Sq.Ft.)</text>
-        <text x="38" y="145" fill="#38bdf8" font-size="11" font-weight="bold" transform="rotate(-90 38,145)" text-anchor="middle">H: ${H} Ft</text>
-        <text x="180" y="22" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle">${cat.toUpperCase()}</text>
-      `;
-      document.getElementById('blueprintSvg').innerHTML = svgMarkup;
-      document.getElementById('pdfBlueprintSvg').innerHTML = svgMarkup;
-    }
-
-    // --- GENERATE QUOTATION (WITH 3 FREE TRIAL CHECK) ---
-    function generateFinalQuotation() {
-      if (!state.isPro && state.quotesUsed >= 3) {
-        openPaywall();
-        return;
-      }
-
-      const cName = document.getElementById('clientName').value.trim() || 'Valued Client';
-      const cPhone = document.getElementById('clientPhone').value.trim();
-      const cAddr = document.getElementById('clientAddress').value.trim() || 'Site Address';
-      const cat = document.getElementById('workCategory').value;
-      const scope = document.getElementById('workScope').value;
-      const L = document.getElementById('dimL').value;
-      const W = document.getElementById('dimW').value;
-      const H = document.getElementById('dimH').value;
-      const totals = recalcTotals();
-      const qId = 'QT-' + (101 + state.history.length);
-      const today = new Date().toLocaleDateString('en-IN');
-
-      // Populate PDF Sheet
-      document.getElementById('pdfShopName').innerText = state.shopName;
-      document.getElementById('pdfShopTag').innerText = state.tagline;
-      document.getElementById('pdfShopContact').innerText = `📞 ${state.mobile} | ${state.city}`;
-      document.getElementById('pdfDate').innerText = 'Date: ' + today;
-      document.getElementById('pdfQuoteId').innerText = 'No: ' + qId;
-      document.getElementById('pdfClientName').innerText = cName + (cPhone ? ` (${cPhone})` : '');
-      document.getElementById('pdfClientAddr').innerText = cAddr;
-      document.getElementById('pdfWorkType').innerText = `${cat} (${scope})`;
-      document.getElementById('pdfWorkSize').innerText = `${L} × ${W} × ${H} Ft (${L*W} Sq.Ft.)`;
-
-      const tbody = document.getElementById('pdfItemsBody');
-      tbody.innerHTML = '';
-      items.forEach(it => {
-        const amt = it.qty * it.rate;
-        tbody.innerHTML += `
-          <tr>
-            <td class="p-2 font-semibold">${it.desc}</td>
-            <td class="p-2 text-center">${it.qty} ${it.unit}</td>
-            <td class="p-2 text-right">₹${it.rate}</td>
-            <td class="p-2 text-right font-bold">₹${amt.toLocaleString('en-IN')}</td>
-          </tr>
-        `;
-      });
-
-      document.getElementById('pdfSub').innerText = '₹' + totals.sub.toLocaleString('en-IN');
-      document.getElementById('pdfGst').innerText = '₹' + totals.gstAmt.toLocaleString('en-IN');
-      document.getElementById('pdfTotal').innerText = '₹' + totals.grand.toLocaleString('en-IN');
-      document.getElementById('pdfTermsText').innerHTML = state.terms.replace(/\n/g, '<br/>');
-
-      // Increment usage & save history
-      state.quotesUsed += 1;
-      state.history.unshift({
-        id: qId,
-        date: today,
-        client: cName,
-        work: cat,
-        total: totals.grand
-      });
-      saveState();
-      switchTab('history');
-    }
-
-    function shareWhatsApp() {
-      const cName = document.getElementById('pdfClientName').innerText;
-      const work = document.getElementById('pdfWorkType').innerText;
-      const size = document.getElementById('pdfWorkSize').innerText;
-      const total = document.getElementById('pdfTotal').innerText;
-      const msg = `*${state.shopName}* - Quotation\n\nClient: ${cName}\nWork: ${work}\nSize: ${size}\n*Total Estimate: ${total}*\n\n_Note: Any extra work/items beyond agreed scope will be charged extra._\nContact: ${state.mobile}`;
-      window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
-    }
-
-    function saveProfile() {
-      state.shopName = document.getElementById('profShopName').value.trim() || state.shopName;
-      state.tagline = document.getElementById('profTagline').value.trim();
-      state.mobile = document.getElementById('profMobile').value.trim() || state.mobile;
-      state.city = document.getElementById('profCity').value.trim();
-      state.terms = document.getElementById('profTerms').value.trim();
-      saveState();
-      alert('✅ પ્રોફાઇલ અને શરતો સેવ થઈ ગઈ છે!');
-    }
-
-    function switchTab(tab) {
-      ['quote', 'design', 'history', 'profile'].forEach(t => {
-        document.getElementById('tab-' + t).classList.toggle('hidden', t !== tab);
-        const nav = document.getElementById('nav-' + t);
-        nav.className = t === tab
-          ? 'flex flex-col items-center text-amber-600 font-extrabold text-[11px]'
-          : 'flex flex-col items-center text-slate-500 font-bold text-[11px]';
-      });
-      if (tab === 'design') updateBlueprint();
-    }
-
-    function updateUIState() {
-      if (state.loggedIn) {
-        document.getElementById('loginModal').classList.add('hidden');
-      }
-      document.getElementById('profShopName').value = state.shopName;
-      document.getElementById('profTagline').value = state.tagline;
-      document.getElementById('profMobile').value = state.mobile;
-      document.getElementById('profCity').value = state.city;
-      document.getElementById('profTerms').value = state.terms;
-      document.getElementById('quoteNoBadge').innerText = 'QT-' + (101 + state.history.length);
-
-      const left = Math.max(0, 3 - state.quotesUsed);
-      if (state.isPro) {
-        document.getElementById('headerTrialBadge').innerText = '⭐ PRO PLAN ACTIVE';
-        document.getElementById('planStatusBadge').innerText = 'PRO ACTIVE (₹1,199/Yr)';
-        document.getElementById('planDetailsTxt').innerText = 'તમારું વાર્ષિક સબ્સ્ક્રિપ્શન ચાલુ છે (Unlimited Quotations).';
+      if (workType === 'peb_structure') {
+        if (maxSpan <= 30) {
+          col = 'ISMB 150 / H-Beam (150×75mm) Heavy MS Column';
+          rafter = 'ISMB 150 Tapered Rafter + Cleat Plate & High-Tensile Nut-Bolts';
+          purlin = 'Z-Purlin (150×50×2.0mm) અથવા 3"×1.5" MS Pipe';
+        } else if (maxSpan <= 50) {
+          col = 'ISMB 200 / Built-up H-Beam (200×100mm) Heavy Column';
+          rafter = 'ISMB 200 / Built-up Tapered PEB Rafter';
+          purlin = 'Z-Purlin (180×60×2.0mm) GI Heavy Purlin';
+        } else {
+          col = 'Built-up PEB H-Beam (250×125mm / 300mm) + Stiffener Plates';
+          rafter = 'Built-up Tapered PEB Truss Rafter + Sag Rods & Bracing';
+          purlin = 'Z-Purlin (200×60×2.2mm) High-Strength GI Purlin';
+        }
+        roof = '12mm/16mm MS Base Plate + J-Bolts + 0.50mm Color Coated Galvalume Sheet';
+      } else if (workType === 'shed_ms') {
+        if (maxSpan <= 20) {
+          col = '3"×3" (75×75mm) MS Square Pipe (2.5mm / 3.0mm Gauge)';
+          rafter = '2"×2" (50×50mm) MS Square Pipe Truss / Rafter';
+          purlin = '1.5"×1.5" (40×40mm) MS Square Pipe';
+        } else {
+          col = '4"×4" (100×100mm) MS Square Pipe (3.0mm / 3.6mm Heavy Gauge)';
+          rafter = '3"×1.5" અથવા 2.5"×2.5" MS Heavy Truss Frame';
+          purlin = '2"×1" (50×25mm) MS Rectangular Pipe';
+        }
+        roof = '8mm MS Base Plate + Anchor Bolts + 0.45mm Color Coated Patra';
       } else {
-        document.getElementById('headerTrialBadge').innerText = `Free Trial: ${left}/3 Left`;
-        document.getElementById('planDetailsTxt').innerText = `તમારી પાસે ${left} ફ્રી ક્વોટેશન બાકી છે. ત્યારબાદ ₹1,199/વર્ષ (Non-Refundable).`;
+        // Gazebo (Naliya or UPVC)
+        if (maxSpan <= 16) {
+          col = '3"×3" (75×75mm) MS Square Pipe (2.5mm Gauge) - 4/6 Pillars';
+          rafter = '2"×2" (50×50mm) MS Pipe Pyramid / Hip Frame';
+          purlin = '1.5"×1" MS Rectangular Pipe (નળિયા/પતરા સપોર્ટ માટે)';
+        } else {
+          col = '4"×4" (100×100mm) MS Square Pipe (3.0mm Heavy Gauge)';
+          rafter = '3"×1.5" MS Pipe Heavy Pyramid Truss';
+          purlin = '2"×1" MS Rectangular Pipe';
+        }
+        roof = (workType === 'gazebo_naliya')
+          ? '6mm MS Base Plate + ટેરાકોટા / સિરામિક રૂફિંગ નળિયા (Naliya) + Ridge'
+          : '6mm MS Base Plate + 3-Layer Insulated UPVC રૂફિંગ પતરા + Ridge';
       }
 
-      const hList = document.getElementById('historyList');
-      if (state.history.length === 0) {
-        hList.innerHTML = '<p class="text-slate-400">હજુ સુધી કોઈ ક્વોટેશન સેવ થયું નથી.</p>';
-      } else {
-        hList.innerHTML = state.history.map(h => `
-          <div class="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-200">
-            <div>
-              <p class="font-bold text-slate-900">${h.id} • ${h.client}</p>
-              <p class="text-[11px] text-slate-500">${h.work} (${h.date})</p>
-            </div>
-            <span class="font-black text-slate-900">₹${h.total.toLocaleString('en-IN')}</span>
-          </div>
-        `).join('');
-      }
+      document.getElementById('colSize').value = col;
+      document.getElementById('rafterSize').value = rafter;
+      document.getElementById('purlinSize').value = purlin;
+      document.getElementById('roofSize').value = roof;
+
+      updateQuotation();
     }
 
-    // Init
-    renderItems();
-    updateBlueprint();
-    updateUIState();
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
+    function updateQuotation() {
+      const pName = document.getElementById('partyName').value.trim() || 'માનનીય ગ્રાહકશ્રી';
+      const pMobile = document.getElementById('partyMobile').value.trim() || '-';
+      const pAddress = document.getElementById('partyAddress').value.trim() || '-';
+
+      const workSelect = document.getElementById('workType');
+      const workTitle = workSelect.options[workSelect.selectedIndex].text;
+      const mode = document.getElementById('materialMode').value;
+
+      const L = document.getElementById('lengthFt').value || 0;
+      const W = document.getElementById('widthFt').value || 0;
+      const sqft = parseFloat(document.getElementById('totalSqft').value) || 0;
+      const rate = parseFloat(document.getElementById('rateSqft').value) || 0;
+      const total = Math.round(sqft * rate);
+
+      document.getElementById('totalAmountDisplay').value = '₹ ' + total.toLocaleString('en-IN');
+
+      // Update Letterhead
+      document.getElementById('outPartyName').innerText = pName;
+      document.getElementById('outPartyMobile').innerText = pMobile;
+      document.getElementById('outPartyAddress').innerText = pAddress;
+      document.getElementById('outScopeBadge').innerText = (mode === 'with_material') ? 'With Material (મટીરીયલ સાથે)' : 'Only Labor (ફક્ત મજૂરી)';
+
+      document.getElementById('outWorkTitle').innerText = workTitle;
+      document.getElementById('outDimensions').innerText = 'સાઈઝ: ' + L + ' ફૂટ × ' + W + ' ફૂટ (' + (mode === 'with_material' ? 'With Material' : 'Only Labor') + ')';
+      document.getElementById('outSqft').innerText = sqft;
+      document.getElementById('outRate').innerText = '₹ ' + rate.toLocaleString('en-IN');
+      document.getElementById('outTotal').innerText = '₹ ' + total.toLocaleString('en-IN');
+
+      // Specs visibility & text
+      const specSection = document.getElementById('outSpecSection');
+      const specCard = document.getElementById('specCard');
+      if (mode === 'with_material') {
+        specSection.style.display = 'block';
+        specCard.style.display = 'block';
+      } else {
+        specSection.style.display = 'none';
+        specCard.style.display = 'none';
+      }
+
+      document.getElementById('outCol').innerText = document.getElementById('colSize').value;
+      document.getElementById('outRafter').innerText = document.getElementById('rafterSize').value;
+      document.getElementById('outPurlin').innerText = document.getElementById('purlinSize').value;
+      document.getElementById('outRoof').innerText = document.getElementById('roofSize').value;
+    }
+
+    function downloadPDF() {
+      window.print();
     }
   </script>
 </body>
