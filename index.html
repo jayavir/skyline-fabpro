@@ -308,4 +308,912 @@
           <div class="grid-3">
             <button class="btn btn-primary" onclick="saveCurrentQuote()">💾 હિસાબ/રેકોર્ડ સેવ કરો</button>
             <button class="btn btn-wa" onclick="shareOnWhatsApp()">📲 WhatsApp પર મોકલો</button>
-            <button class="btn btn-warning" onclick="window.print()">📄
+            <button class="btn btn-warning" onclick="window.print()">📄 PDF ડાઉનલોડ / પ્રિન્ટ</button>
+          </div>
+          <div style="display:flex;gap:14px;margin-top:10px;flex-wrap:wrap;">
+            <label style="margin:0;display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12.5px;color:#0f172a;">
+              <input type="checkbox" id="include2DCheck" checked onchange="toggleExtrasInPDF()" style="width:auto;margin:0;" />
+              PDF માં 2D ડિઝાઈન રાખો
+            </label>
+            <label style="margin:0;display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12.5px;color:#15803d;">
+              <input type="checkbox" id="includeBankCheck" checked onchange="toggleExtrasInPDF()" style="width:auto;margin:0;" />
+              PDF માં બેંક એકાઉન્ટ રાખો
+            </label>
+          </div>
+        </div>
+
+        <!-- LETTERHEAD PREVIEW -->
+        <div class="card">
+          <div class="letterhead" id="letterheadArea">
+            <div class="lh-header">
+              <div class="lh-title">
+                <h2>SKYLINE FABRICATION</h2>
+                <p>Industrial Sheds • PEB Structures • Designer Gazebos &amp; All MS/SS Work</p>
+              </div>
+              <div class="lh-contact">
+                <strong>જયવીરભાઈ મકવાણા</strong><br />
+                📞 મો: +91 91067 43538<br />
+                📍 સુરત, ગુજરાત
+              </div>
+            </div>
+
+            <div class="lh-badge" id="outDocBadge">QUOTATION / ESTIMATE</div>
+
+            <div class="lh-meta">
+              <div>
+                <strong>પ્રતિ શ્રી (To):</strong> <span id="outPartyName">માનનીય ગ્રાહકશ્રી</span><br />
+                <strong>મોબાઈલ:</strong> <span id="outPartyMobile">-</span><br />
+                <strong>સાઈટ સરનામું:</strong> <span id="outPartyAddress">-</span>
+              </div>
+              <div style="text-align:right;">
+                <strong>નંબર:</strong> <span id="outQuoteNo">QT-101</span><br />
+                <strong>તારીખ:</strong> <span id="outDate"></span><br />
+                <strong>કામનો પ્રકાર:</strong> <span id="outScopeBadge">With Material</span>
+              </div>
+            </div>
+
+            <table class="q-table">
+              <thead>
+                <tr>
+                  <th style="width:7%;">ક્રમ</th>
+                  <th style="width:45%;">કામની વિગત (Description)</th>
+                  <th style="width:15%;">માપ (Sq.Ft)</th>
+                  <th style="width:16%;">ભાવ (₹)</th>
+                  <th style="width:17%;">કુલ રકમ (₹)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <strong id="outWorkTitle">Gazebo (નળિયાવાળો ગઝેબો)</strong><br />
+                    <small id="outDimensions">સાઈઝ: 15 ફૂટ (L) × 15 ફૂટ (W) × 10 ફૂટ (H)</small>
+                  </td>
+                  <td id="outSqft">225</td>
+                  <td id="outRate">₹ 410</td>
+                  <td><strong id="outSubTotal">₹ 92,250</strong></td>
+                </tr>
+                <tr id="gstRow" style="display:none;">
+                  <td colspan="4" style="text-align:right;"><strong>GST (18%):</strong></td>
+                  <td id="outGstAmt">₹ 0</td>
+                </tr>
+                <tr>
+                  <td colspan="4" style="text-align:right;background:#f1f5f9;"><strong>ગ્રાન્ડ ટોટલ (Grand Total):</strong></td>
+                  <td style="background:#f1f5f9;"><strong id="outGrandTotal" style="font-size:13.5px;">₹ 92,250</strong></td>
+                </tr>
+                <tr id="paidRow" style="display:none;">
+                  <td colspan="4" style="text-align:right;color:#15803d;"><strong>જમા રકમ (Advance Paid):</strong></td>
+                  <td style="color:#15803d;"><strong id="outPaidAmt">₹ 0</strong></td>
+                </tr>
+                <tr id="balRow" style="display:none;">
+                  <td colspan="4" style="text-align:right;color:#b91c1c;"><strong>બાકી રકમ (Balance Due):</strong></td>
+                  <td style="color:#b91c1c;"><strong id="outBalAmt">₹ 0</strong></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- PIPE / PEB COLUMN SPECS BOX -->
+            <div class="spec-box" id="outSpecSection">
+              <h4>મટીરીયલ અને સ્ટ્રક્ચરના ચોક્કસ માપ (Pipe &amp; PEB Column Specifications):</h4>
+              <ul>
+                <li><strong>મેઈન કોલમ / થાંભલા (Main Column):</strong> <span id="outCol"></span></li>
+                <li><strong>રાફ્ટર / ટ્રસ / કાંચી (Rafter / Truss):</strong> <span id="outRafter"></span></li>
+                <li><strong>પર્લિન / આડા પાઈપ (Purlin):</strong> <span id="outPurlin"></span></li>
+                <li><strong>બેઝ પ્લેટ અને રૂફિંગ (Roofing &amp; Finish):</strong> <span id="outRoof"></span></li>
+              </ul>
+            </div>
+
+            <!-- 2D STRUCTURE DESIGN INSIDE LETTERHEAD -->
+            <div class="lh-drawing-box" id="lhDrawingSection">
+              <h4 id="lhDrawingTitle">પ્રપોઝ્ડ 2D સ્ટ્રક્ચર ડિઝાઈન (Proposed 2D Structure Elevation &amp; Layout)</h4>
+              <img id="lhDrawingImg" alt="2D Structure Design" />
+            </div>
+
+            <!-- TERMS + BANK ACCOUNT DETAILS -->
+            <div class="bank-terms-grid">
+              <div class="terms-box">
+                <strong>નિયમો અને શરતો (Terms &amp; Conditions):</strong><br />
+                ૧. RCC ફાઉન્ડેશન ખાડા તથા કોંક્રીટનું કામ પાર્ટી તરફથી રહેશે.<br />
+                ૨. વેલ્ડિંગ માટે ઈલેક્ટ્રીક પાવર (લાઈટ) અને પાણી પાર્ટીએ આપવાનું રહેશે.<br />
+                ૩. લોખંડ પર ૧ કોટ પ્રાઈમર અને ૨ કોટ કલર (With Material માં) સામેલ છે.<br />
+                ૪. પેમેન્ટ: <span id="outAdvText">૫૦%</span> એડવાન્સ, ૪૦% મટીરીયલ પર અને બાકીનું કામ પૂર્ણ થયે.<br />
+                ૫. આ કોટેશનની માન્યતા ૧૫ દિવસ સુધી રહેશે.
+              </div>
+
+              <div class="lh-bank-box" id="lhBankSection">
+                <h4>🏦 બેંક એકાઉન્ટ વિગત (Payment Details)</h4>
+                <strong>A/C Name:</strong> <span id="outBankHolder">SKYLINE FABRICATION</span><br />
+                <strong>Bank Name:</strong> <span id="outBankName">State Bank of India (SBI)</span><br />
+                <strong>A/C No:</strong> <span id="outBankAcc">00000000000</span><br />
+                <strong>IFSC Code:</strong> <span id="outBankIfsc">SBIN0000000</span><br />
+                <strong>UPI / GPay:</strong> <span id="outBankUpi">9106743538</span>
+              </div>
+            </div>
+
+            <div class="lh-footer">
+              <div>ગ્રાહકની સહી (Customer Sign)</div>
+              <div style="text-align:right;">
+                For, SKYLINE FABRICATION<br />
+                <span style="font-size:11px;font-weight:normal;">(જયવીરભાઈ મકવાણા)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: 2D STRUCTURE DESIGN CUSTOMIZER -->
+      <div id="tab2D" class="tab-section" style="display:none;">
+        <div class="card">
+          <h3>📐 2D Structure &amp; Gazebo Design Customizer</h3>
+          <div class="grid-3">
+            <div>
+              <label>ડિઝાઈન સ્ટાઈલ (Design Style)</label>
+              <select id="designStyle" onchange="draw2DDesign()">
+                <option value="gazebo_pyramid">Gazebo (પિરામિડ નળિયા/UPVC ડિઝાઈન)</option>
+                <option value="shed_gable">Full Shed (આખો શેડ - Front + 3D Length View)</option>
+                <option value="shed_slope">Single Slope Shed (એક ઢાળિયો શેડ)</option>
+              </select>
+            </div>
+            <div>
+              <label>રૂફ કલર (Roof Color)</label>
+              <select id="roofColor" onchange="draw2DDesign()">
+                <option value="#c2410c">Terracotta Naliya (નળિયા કલર)</option>
+                <option value="#1d4ed8">Royal Blue Sheet (બ્લુ પતરા)</option>
+                <option value="#991b1b">Brick Red Sheet (લાલ પતરા)</option>
+                <option value="#0f766e">Teal Green Sheet (ગ્રીન પતરા)</option>
+              </select>
+            </div>
+            <div>
+              <label>લંબાઈમાં કોલમની સંખ્યા (Column Bays)</label>
+              <select id="bayCount" onchange="draw2DDesign()">
+                <option value="3">3 Bays (4 થાંભલા લાઈનમાં)</option>
+                <option value="4" selected>4 Bays (5 થાંભલા લાઈનમાં)</option>
+                <option value="5">5 Bays (6 થાંભલા લાઈનમાં)</option>
+                <option value="6">6 Bays (7 થાંભલા લાઈનમાં)</option>
+              </select>
+            </div>
+          </div>
+
+          <canvas id="designCanvas" width="760" height="360"></canvas>
+          <div style="margin-top:10px;font-size:13px;background:#f8fafc;padding:10px;border-radius:8px;border:1px solid #cbd5e1;" id="canvasSummary"></div>
+          <button class="btn btn-primary" style="margin-top:10px;" onclick="switchTab('tabQuotation', 'navQuote')">✅ આ ડિઝાઈન સાથે કોટેશન PDF જુઓ</button>
+        </div>
+      </div>
+
+      <!-- TAB 3: SAVED QUOTATIONS & PARTY KHATA -->
+      <div id="tabKhata" class="tab-section" style="display:none;">
+        <div class="card">
+          <h3>
+            <span>📒 સેવ કરેલા કોટેશન &amp; પાર્ટી ખાતાવહી (Khata)</span>
+            <span id="khataSummaryBadge" style="font-size:12px;color:#15803d;">કુલ બાકી: ₹0</span>
+          </h3>
+          <div id="savedQuotesList">
+            <p style="font-size:13px;color:#64748b;">હજુ સુધી કોઈ કોટેશન સેવ નથી કર્યું. કોટેશન બનાવીને "💾 હિસાબ/રેકોર્ડ સેવ કરો" દબાવો.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: WORKER HAJRI & PAGAR (ATTENDANCE) -->
+      <div id="tabWorkers" class="tab-section" style="display:none;">
+        <div class="card">
+          <h3>👷 કારીગર હાજરી અને પગાર હિસાબ (Worker Attendance)</h3>
+          <div class="grid-3">
+            <div>
+              <label>કારીગરનું નામ</label>
+              <input type="text" id="wName" placeholder="દા.ત. મહેશભાઈ (વેલ્ડર)" />
+            </div>
+            <div>
+              <label>રોજનો પગાર (Daily Rate ₹)</label>
+              <input type="number" id="wRate" value="700" />
+            </div>
+            <div style="display:flex;align-items:flex-end;">
+              <button class="btn btn-primary" style="margin-bottom:10px;" onclick="addWorker()">+ કારીગર ઉમેરો</button>
+            </div>
+          </div>
+          <div id="workersList"></div>
+        </div>
+      </div>
+
+      <!-- TAB 5: BANK ACCOUNT & PROFILE SETTINGS -->
+      <div id="tabProfile" class="tab-section" style="display:none;">
+        <div class="card">
+          <h3>🏦 તમારું બેંક એકાઉન્ટ સેટિંગ્સ (PDF લેટરહેડ માટે)</h3>
+          <div class="grid-2">
+            <div>
+              <label>એકાઉન્ટ હોલ્ડરનું નામ</label>
+              <input type="text" id="inBankHolder" value="SKYLINE FABRICATION" />
+            </div>
+            <div>
+              <label>બેંકનું નામ &amp; બ્રાન્ચ</label>
+              <input type="text" id="inBankName" placeholder="દા.ત. Bank of Baroda / SBI - Surat" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div>
+              <label>બેંક એકાઉન્ટ નંબર</label>
+              <input type="text" id="inBankAcc" placeholder="તમારો એકાઉન્ટ નંબર લખો" />
+            </div>
+            <div>
+              <label>IFSC કોડ</label>
+              <input type="text" id="inBankIfsc" placeholder="દા.ત. BARB0SURAT" style="text-transform:uppercase;" />
+            </div>
+          </div>
+          <div>
+            <label>UPI ID / Google Pay / PhonePe નંબર</label>
+            <input type="text" id="inBankUpi" value="9106743538" />
+          </div>
+          <button class="btn btn-success" onclick="saveBankDetails()">💾 Save Bank Details (બેંક વિગત સેવ કરો)</button>
+        </div>
+
+        <div class="card">
+          <h3>👤 Skyline FabPro પ્રોફાઈલ &amp; પ્લાન</h3>
+          <p><strong>કંપની:</strong> Skyline Fabrication (જયવીરભાઈ મકવાણા)</p>
+          <p><strong>મોબાઈલ:</strong> +91 91067 43538 (સુરત, ગુજરાત)</p>
+          <div style="background:#fffbeb;border:1px solid #f59e0b;padding:12px;border-radius:8px;margin-top:12px;">
+            <strong style="color:#92400e;">⭐ Pro Plan: ₹1,199 / વર્ષ (Annual Subscription)</strong>
+            <p style="font-size:13px;margin:6px 0 0;">All-in-One Quotation, Tax Invoice, 2D Design, Party Khata &amp; Worker Attendance સક્રિય છે.</p>
+          </div>
+          <button class="btn btn-danger" style="margin-top:14px;" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION BAR (5 TABS ALL-IN-ONE) -->
+    <div class="bottom-nav no-print">
+      <button id="navQuote" class="active" onclick="switchTab('tabQuotation', 'navQuote')">📄 બિલ/PDF</button>
+      <button id="nav2D" onclick="switchTab('tab2D', 'nav2D')">📐 2D ડિઝાઈન</button>
+      <button id="navKhata" onclick="switchTab('tabKhata', 'navKhata')">📒 ખાતાવહી</button>
+      <button id="navWorkers" onclick="switchTab('tabWorkers', 'navWorkers')">👷 કારીગર</button>
+      <button id="navProfile" onclick="switchTab('tabProfile', 'navProfile')">🏦 બેંક/સેટિંગ</button>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        for (let r of regs) r.unregister();
+      });
+    }
+
+    let otpSent = false;
+
+    function handleLogin() {
+      const btn = document.getElementById('loginBtn');
+      const otpSec = document.getElementById('otpSection');
+      if (!otpSent) {
+        otpSec.style.display = 'block';
+        btn.innerText = 'Verify OTP & Enter App';
+        otpSent = true;
+        alert('તમારો OTP: 1234 છે (કોઈપણ 4 અંક નાખીને આગળ વધો)');
+      } else {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('appScreen').style.display = 'block';
+        initApp();
+      }
+    }
+
+    function logout() {
+      document.getElementById('appScreen').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'flex';
+    }
+
+    function switchTab(tabId, navId) {
+      document.querySelectorAll('.tab-section').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.bottom-nav button').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).style.display = 'block';
+      document.getElementById(navId).classList.add('active');
+      if (tabId === 'tab2D') draw2DDesign();
+      if (tabId === 'tabKhata') renderSavedQuotes();
+      if (tabId === 'tabWorkers') renderWorkers();
+    }
+
+    function toggleExtrasInPDF() {
+      const show2D = document.getElementById('include2DCheck').checked;
+      const showBank = document.getElementById('includeBankCheck').checked;
+      document.getElementById('lhDrawingSection').style.display = show2D ? 'block' : 'none';
+      document.getElementById('lhBankSection').style.display = showBank ? 'block' : 'none';
+    }
+
+    function loadBankDetails() {
+      const saved = JSON.parse(localStorage.getItem('skyline_bank') || '{}');
+      const holder = saved.holder || 'SKYLINE FABRICATION';
+      const bank = saved.bank || 'State Bank of India (SBI)';
+      const acc = saved.acc || 'બેંક/સેટિંગ ટેબમાં સેટ કરો';
+      const ifsc = saved.ifsc || 'SBIN0000000';
+      const upi = saved.upi || '9106743538';
+
+      document.getElementById('inBankHolder').value = holder;
+      document.getElementById('inBankName').value = saved.bank || '';
+      document.getElementById('inBankAcc').value = saved.acc || '';
+      document.getElementById('inBankIfsc').value = saved.ifsc || '';
+      document.getElementById('inBankUpi').value = upi;
+
+      document.getElementById('outBankHolder').innerText = holder;
+      document.getElementById('outBankName').innerText = bank;
+      document.getElementById('outBankAcc').innerText = acc;
+      document.getElementById('outBankIfsc').innerText = ifsc;
+      document.getElementById('outBankUpi').innerText = upi;
+    }
+
+    function saveBankDetails() {
+      const data = {
+        holder: document.getElementById('inBankHolder').value.trim() || 'SKYLINE FABRICATION',
+        bank: document.getElementById('inBankName').value.trim() || '-',
+        acc: document.getElementById('inBankAcc').value.trim() || '-',
+        ifsc: document.getElementById('inBankIfsc').value.trim().toUpperCase() || '-',
+        upi: document.getElementById('inBankUpi').value.trim() || '9106743538'
+      };
+      localStorage.setItem('skyline_bank', JSON.stringify(data));
+      loadBankDetails();
+      alert('✅ બેંક એકાઉન્ટ વિગત સેવ થઈ ગઈ છે!');
+      switchTab('tabQuotation', 'navQuote');
+    }
+
+    function setLang(lang) {
+      document.querySelectorAll('.lang-group button').forEach(b => b.classList.remove('active'));
+      if (lang === 'gu') {
+        document.getElementById('btnGu').classList.add('active');
+        document.getElementById('lblClientTitle').innerText = '૧. ગ્રાહક અને ડોક્યુમેન્ટ પ્રકાર';
+        document.getElementById('lblWorkTitle').innerText = '૨. કામનો પ્રકાર અને માપ (Work & Size)';
+        document.getElementById('lblSpecTitle').innerText = '૩. પાઈપ / PEB કોલમ ના ચોક્કસ માપ (With Material Specs)';
+      } else if (lang === 'hi') {
+        document.getElementById('btnHi').classList.add('active');
+        document.getElementById('lblClientTitle').innerText = '१. ग्राहक और डॉक्यूमेंट प्रकार';
+        document.getElementById('lblWorkTitle').innerText = '२. काम का प्रकार और माप (Work & Size)';
+        document.getElementById('lblSpecTitle').innerText = '३. पाइप / PEB कॉलम के सटीक माप (With Material Specs)';
+      } else {
+        document.getElementById('btnEn').classList.add('active');
+        document.getElementById('lblClientTitle').innerText = '1. Client & Document Type';
+        document.getElementById('lblWorkTitle').innerText = '2. Work Type & Dimensions';
+        document.getElementById('lblSpecTitle').innerText = '3. Pipe & PEB Column Specifications';
+      }
+    }
+
+    function initApp() {
+      const today = new Date();
+      document.getElementById('outDate').innerText = today.toLocaleDateString('en-IN');
+      const qNo = 'QT-' + Math.floor(101 + Math.random() * 899);
+      document.getElementById('outQuoteNo').innerText = qNo;
+      document.getElementById('badgeQuoteNo').innerText = qNo;
+      loadBankDetails();
+      autoSuggestSpecs();
+    }
+
+    function autoSuggestSpecs() {
+      const workType = document.getElementById('workType').value;
+      const mode = document.getElementById('materialMode').value;
+      const L = parseFloat(document.getElementById('lengthFt').value) || 0;
+      const W = parseFloat(document.getElementById('widthFt').value) || 0;
+      const maxSpan = Math.max(L, W);
+
+      const sqft = Math.round(L * W);
+      document.getElementById('totalSqft').value = sqft;
+
+      if (workType.startsWith('gazebo')) {
+        document.getElementById('designStyle').value = 'gazebo_pyramid';
+        document.getElementById('roofColor').value = (workType === 'gazebo_naliya') ? '#c2410c' : '#0f766e';
+      } else {
+        document.getElementById('designStyle').value = 'shed_gable';
+        document.getElementById('roofColor').value = '#1d4ed8';
+      }
+
+      let rate = 410;
+      if (mode === 'with_material') {
+        if (workType === 'gazebo_naliya') rate = 410;
+        else if (workType === 'gazebo_upvc') rate = 380;
+        else if (workType === 'shed_ms') rate = 110;
+        else if (workType === 'peb_structure') rate = 165;
+      } else {
+        if (workType === 'gazebo_naliya') rate = 70;
+        else if (workType === 'gazebo_upvc') rate = 50;
+        else if (workType === 'shed_ms') rate = 20;
+        else if (workType === 'peb_structure') rate = 35;
+      }
+      document.getElementById('rateSqft').value = rate;
+
+      let col = '', rafter = '', purlin = '', roof = '';
+
+      if (workType === 'peb_structure') {
+        if (maxSpan <= 30) {
+          col = 'ISMB 150 / H-Beam (150×75mm) Heavy MS Column';
+          rafter = 'ISMB 150 Tapered Rafter + Cleat Plate & High-Tensile Nut-Bolts';
+          purlin = 'Z-Purlin (150×50×2.0mm) અથવા 3"×1.5" MS Pipe';
+        } else if (maxSpan <= 50) {
+          col = 'ISMB 200 / Built-up H-Beam (200×100mm) Heavy Column';
+          rafter = 'ISMB 200 / Built-up Tapered PEB Rafter';
+          purlin = 'Z-Purlin (180×60×2.0mm) GI Heavy Purlin';
+        } else {
+          col = 'Built-up PEB H-Beam (250×125mm / 300mm) + Stiffener Plates';
+          rafter = 'Built-up Tapered PEB Truss Rafter + Sag Rods & Bracing';
+          purlin = 'Z-Purlin (200×60×2.2mm) High-Strength GI Purlin';
+        }
+        roof = '12mm/16mm MS Base Plate + J-Bolts + 0.50mm Color Coated Galvalume Sheet';
+      } else if (workType === 'shed_ms') {
+        if (maxSpan <= 20) {
+          col = '3"×3" (75×75mm) MS Square Pipe (2.5mm / 3.0mm Gauge)';
+          rafter = '2"×2" (50×50mm) MS Square Pipe Truss / Rafter';
+          purlin = '1.5"×1.5" (40×40mm) MS Square Pipe';
+        } else {
+          col = '4"×4" (100×100mm) MS Square Pipe (3.0mm / 3.6mm Heavy Gauge)';
+          rafter = '3"×1.5" અથવા 2.5"×2.5" MS Heavy Truss Frame';
+          purlin = '2"×1" (50×25mm) MS Rectangular Pipe';
+        }
+        roof = '8mm MS Base Plate + Anchor Bolts + 0.45mm Color Coated Patra';
+      } else {
+        if (maxSpan <= 16) {
+          col = '3"×3" (75×75mm) MS Square Pipe (2.5mm Gauge) - 4/6 Pillars';
+          rafter = '2"×2" (50×50mm) MS Pipe Pyramid / Hip Frame';
+          purlin = '1.5"×1" MS Rectangular Pipe (નળિયા/પતરા સપોર્ટ માટે)';
+        } else {
+          col = '4"×4" (100×100mm) MS Square Pipe (3.0mm Heavy Gauge)';
+          rafter = '3"×1.5" MS Pipe Heavy Pyramid Truss';
+          purlin = '2"×1" MS Rectangular Pipe';
+        }
+        roof = (workType === 'gazebo_naliya')
+          ? '6mm MS Base Plate + ટેરાકોટા / સિરામિક રૂફિંગ નળિયા (Naliya) + Ridge'
+          : '6mm MS Base Plate + 3-Layer Insulated UPVC રૂફિંગ પતરા + Ridge';
+      }
+
+      document.getElementById('colSize').value = col;
+      document.getElementById('rafterSize').value = rafter;
+      document.getElementById('purlinSize').value = purlin;
+      document.getElementById('roofSize').value = roof;
+
+      updateQuotation();
+    }
+
+    function updateQuotation() {
+      const docType = document.getElementById('docType').value;
+      document.getElementById('outDocBadge').innerText = docType;
+
+      const pName = document.getElementById('partyName').value.trim() || 'માનનીય ગ્રાહકશ્રી';
+      const pMobile = document.getElementById('partyMobile').value.trim() || '-';
+      const pAddress = document.getElementById('partyAddress').value.trim() || '-';
+
+      const workSelect = document.getElementById('workType');
+      const workTitle = workSelect.options[workSelect.selectedIndex].text;
+      const mode = document.getElementById('materialMode').value;
+
+      const L = document.getElementById('lengthFt').value || 0;
+      const W = document.getElementById('widthFt').value || 0;
+      const H = document.getElementById('heightFt').value || 0;
+      const sqft = parseFloat(document.getElementById('totalSqft').value) || 0;
+      const rate = parseFloat(document.getElementById('rateSqft').value) || 0;
+      const gstPct = parseFloat(document.getElementById('gstRate').value) || 0;
+      const advPct = document.getElementById('advPct').value || 50;
+      const paidAmt = parseFloat(document.getElementById('paidAmount').value) || 0;
+
+      const subTotal = Math.round(sqft * rate);
+      const gstAmt = Math.round(subTotal * (gstPct / 100));
+      const grandTotal = subTotal + gstAmt;
+      const balAmt = Math.max(0, grandTotal - paidAmt);
+
+      document.getElementById('outPartyName').innerText = pName;
+      document.getElementById('outPartyMobile').innerText = pMobile;
+      document.getElementById('outPartyAddress').innerText = pAddress;
+      document.getElementById('outScopeBadge').innerText = (mode === 'with_material') ? 'With Material (મટીરીયલ સાથે)' : 'Only Labor (ફક્ત મજૂરી)';
+
+      document.getElementById('outWorkTitle').innerText = workTitle;
+      document.getElementById('outDimensions').innerText = `સાઈઝ: ${L} ફૂટ (L) × ${W} ફૂટ (W) × ${H} ફૂટ (H)`;
+      document.getElementById('outSqft').innerText = sqft;
+      document.getElementById('outRate').innerText = '₹ ' + rate.toLocaleString('en-IN');
+      document.getElementById('outSubTotal').innerText = '₹ ' + subTotal.toLocaleString('en-IN');
+
+      document.getElementById('gstRow').style.display = (gstPct > 0) ? 'table-row' : 'none';
+      document.getElementById('outGstAmt').innerText = '₹ ' + gstAmt.toLocaleString('en-IN');
+      document.getElementById('outGrandTotal').innerText = '₹ ' + grandTotal.toLocaleString('en-IN');
+
+      if (paidAmt > 0) {
+        document.getElementById('paidRow').style.display = 'table-row';
+        document.getElementById('balRow').style.display = 'table-row';
+        document.getElementById('outPaidAmt').innerText = '₹ ' + paidAmt.toLocaleString('en-IN');
+        document.getElementById('outBalAmt').innerText = '₹ ' + balAmt.toLocaleString('en-IN');
+      } else {
+        document.getElementById('paidRow').style.display = 'none';
+        document.getElementById('balRow').style.display = 'none';
+      }
+
+      document.getElementById('outAdvText').innerText = advPct + '%';
+
+      const specSection = document.getElementById('outSpecSection');
+      const specCard = document.getElementById('specCard');
+      if (mode === 'with_material') {
+        specSection.style.display = 'block';
+        specCard.style.display = 'block';
+      } else {
+        specSection.style.display = 'none';
+        specCard.style.display = 'none';
+      }
+
+      document.getElementById('outCol').innerText = document.getElementById('colSize').value;
+      document.getElementById('outRafter').innerText = document.getElementById('rafterSize').value;
+      document.getElementById('outPurlin').innerText = document.getElementById('purlinSize').value;
+      document.getElementById('outRoof').innerText = document.getElementById('roofSize').value;
+
+      draw2DDesign();
+    }
+
+    // --- WHATSAPP SHARE ---
+    function shareOnWhatsApp() {
+      const pName = document.getElementById('partyName').value.trim() || 'ગ્રાહકશ્રી';
+      const pMobile = document.getElementById('partyMobile').value.trim().replace(/\D/g, '');
+      const workSelect = document.getElementById('workType');
+      const workTitle = workSelect.options[workSelect.selectedIndex].text;
+      const L = document.getElementById('lengthFt').value;
+      const W = document.getElementById('widthFt').value;
+      const sqft = document.getElementById('totalSqft').value;
+      const rate = document.getElementById('rateSqft').value;
+      const total = document.getElementById('outGrandTotal').innerText;
+      const mode = document.getElementById('materialMode').value;
+
+      let msg = `*SKYLINE FABRICATION - ${document.getElementById('docType').value}*\n`;
+      msg += `પ્રતિ શ્રી: *${pName}*\n`;
+      msg += `કામ: *${workTitle}*\n`;
+      msg += `માપ: ${L} × ${W} Ft (${sqft} Sq.Ft)\n`;
+      msg += `ભાવ: ₹${rate}/Sq.Ft (${mode === 'with_material' ? 'With Material' : 'Only Labor'})\n`;
+      msg += `*કુલ રકમ: ${total}*\n`;
+      if (mode === 'with_material') {
+        msg += `\n*મટીરીયલ સ્પેસિફિકેશન:*\n• Column: ${document.getElementById('colSize').value}\n• Rafter: ${document.getElementById('rafterSize').value}\n• Purlin: ${document.getElementById('purlinSize').value}\n`;
+      }
+      msg += `\nસંપર્ક: જયવીરભાઈ મકવાણા (9106743538)`;
+
+      const url = pMobile.length >= 10
+        ? `https://wa.me/91${pMobile.slice(-10)}?text=${encodeURIComponent(msg)}`
+        : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // --- SAVED QUOTATIONS & KHATA ---
+    function saveCurrentQuote() {
+      const list = JSON.parse(localStorage.getItem('skyline_quotes') || '[]');
+      const sqft = parseFloat(document.getElementById('totalSqft').value) || 0;
+      const rate = parseFloat(document.getElementById('rateSqft').value) || 0;
+      const gstPct = parseFloat(document.getElementById('gstRate').value) || 0;
+      const sub = Math.round(sqft * rate);
+      const grand = sub + Math.round(sub * gstPct / 100);
+      const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
+
+      const item = {
+        id: document.getElementById('outQuoteNo').innerText,
+        date: document.getElementById('outDate').innerText,
+        docType: document.getElementById('docType').value,
+        partyName: document.getElementById('partyName').value.trim() || 'માનનીય ગ્રાહકશ્રી',
+        partyMobile: document.getElementById('partyMobile').value.trim(),
+        partyAddress: document.getElementById('partyAddress').value.trim(),
+        workType: document.getElementById('workType').value,
+        materialMode: document.getElementById('materialMode').value,
+        L: document.getElementById('lengthFt').value,
+        W: document.getElementById('widthFt').value,
+        H: document.getElementById('heightFt').value,
+        rate: rate,
+        gstRate: gstPct,
+        grandTotal: grand,
+        paid: paid
+      };
+
+      const existingIdx = list.findIndex(q => q.id === item.id);
+      if (existingIdx >= 0) list[existingIdx] = item;
+      else list.unshift(item);
+
+      localStorage.setItem('skyline_quotes', JSON.stringify(list));
+      alert('✅ કોટેશન / બિલ ખાતાવહીમાં સેવ થઈ ગયું છે!');
+    }
+
+    function renderSavedQuotes() {
+      const list = JSON.parse(localStorage.getItem('skyline_quotes') || '[]');
+      const container = document.getElementById('savedQuotesList');
+      if (list.length === 0) {
+        container.innerHTML = '<p style="font-size:13px;color:#64748b;">હજુ સુધી કોઈ રેકોર્ડ સેવ નથી.</p>';
+        document.getElementById('khataSummaryBadge').innerText = 'કુલ બાકી: ₹0';
+        return;
+      }
+
+      let totalDue = 0;
+      container.innerHTML = list.map((q, idx) => {
+        const due = Math.max(0, q.grandTotal - (q.paid || 0));
+        totalDue += due;
+        return `
+          <div class="list-item">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong>${q.partyName} (${q.id})</strong>
+              <span class="${due === 0 ? 'badge-paid' : 'badge-due'}">${due === 0 ? 'Full Paid' : 'બાકી: ₹' + due.toLocaleString('en-IN')}</span>
+            </div>
+            <div style="font-size:12px;color:#475569;margin:4px 0;">
+              ${q.date} | ${q.L}×${q.W} Ft | કુલ: <strong>₹${q.grandTotal.toLocaleString('en-IN')}</strong> | જમા: ₹${(q.paid || 0).toLocaleString('en-IN')}
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn btn-primary" style="padding:6px;font-size:12px;" onclick="loadSavedQuote(${idx})">✏️ ખોલો / બિલ બનાવો</button>
+              <button class="btn btn-success" style="padding:6px;font-size:12px;" onclick="addPaymentToQuote(${idx})">₹ જમા ઉમેરો</button>
+              <button class="btn btn-danger" style="padding:6px;font-size:12px;width:auto;" onclick="deleteSavedQuote(${idx})">🗑️</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      document.getElementById('khataSummaryBadge').innerText = 'કુલ બાકી: ₹' + totalDue.toLocaleString('en-IN');
+    }
+
+    function loadSavedQuote(idx) {
+      const list = JSON.parse(localStorage.getItem('skyline_quotes') || '[]');
+      const q = list[idx];
+      if (!q) return;
+      document.getElementById('outQuoteNo').innerText = q.id;
+      document.getElementById('badgeQuoteNo').innerText = q.id;
+      document.getElementById('docType').value = q.docType || 'QUOTATION / ESTIMATE';
+      document.getElementById('partyName').value = q.partyName;
+      document.getElementById('partyMobile').value = q.partyMobile;
+      document.getElementById('partyAddress').value = q.partyAddress;
+      document.getElementById('workType').value = q.workType;
+      document.getElementById('materialMode').value = q.materialMode;
+      document.getElementById('lengthFt').value = q.L;
+      document.getElementById('widthFt').value = q.W;
+      document.getElementById('heightFt').value = q.H;
+      document.getElementById('gstRate').value = q.gstRate || 0;
+      document.getElementById('paidAmount').value = q.paid || 0;
+      autoSuggestSpecs();
+      document.getElementById('rateSqft').value = q.rate;
+      updateQuotation();
+      switchTab('tabQuotation', 'navQuote');
+    }
+
+    function addPaymentToQuote(idx) {
+      const list = JSON.parse(localStorage.getItem('skyline_quotes') || '[]');
+      const amt = parseFloat(prompt('પાર્ટી તરફથી મળેલી નવી રકમ (₹) લખો:', '0'));
+      if (!isNaN(amt) && amt > 0) {
+        list[idx].paid = (list[idx].paid || 0) + amt;
+        localStorage.setItem('skyline_quotes', JSON.stringify(list));
+        renderSavedQuotes();
+      }
+    }
+
+    function deleteSavedQuote(idx) {
+      if (!confirm('આ રેકોર્ડ ડિલીટ કરવો છે?')) return;
+      const list = JSON.parse(localStorage.getItem('skyline_quotes') || '[]');
+      list.splice(idx, 1);
+      localStorage.setItem('skyline_quotes', JSON.stringify(list));
+      renderSavedQuotes();
+    }
+
+    // --- WORKER ATTENDANCE & SALARY ---
+    function addWorker() {
+      const name = document.getElementById('wName').value.trim();
+      const rate = parseFloat(document.getElementById('wRate').value) || 0;
+      if (!name) return alert('કારીગરનું નામ લખો');
+      const workers = JSON.parse(localStorage.getItem('skyline_workers') || '[]');
+      workers.push({ name, rate, days: 0, advance: 0 });
+      localStorage.setItem('skyline_workers', JSON.stringify(workers));
+      document.getElementById('wName').value = '';
+      renderWorkers();
+    }
+
+    function renderWorkers() {
+      const workers = JSON.parse(localStorage.getItem('skyline_workers') || '[]');
+      const box = document.getElementById('workersList');
+      if (workers.length === 0) {
+        box.innerHTML = '<p style="font-size:13px;color:#64748b;">કોઈ કારીગર ઉમેરેલ નથી.</p>';
+        return;
+      }
+      box.innerHTML = workers.map((w, i) => {
+        const earned = w.days * w.rate;
+        const net = earned - w.advance;
+        return `
+          <div class="list-item">
+            <div style="display:flex;justify-content:space-between;">
+              <strong>👷 ${w.name} (₹${w.rate}/દિવસ)</strong>
+              <strong style="color:#15803d;">ચૂકવવાપાત્ર: ₹${net.toLocaleString('en-IN')}</strong>
+            </div>
+            <div style="font-size:12px;color:#475569;margin:4px 0;">
+              કુલ હાજરી: <strong>${w.days} દિવસ</strong> (₹${earned}) | ઉપાડ (Advance): <strong>₹${w.advance}</strong>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn btn-success" style="padding:6px;font-size:12px;" onclick="markPresent(${i})">+1 હાજરી (P)</button>
+              <button class="btn btn-warning" style="padding:6px;font-size:12px;" onclick="addWorkerAdvance(${i})">₹ ઉપાડ ઉમેરો</button>
+              <button class="btn btn-primary" style="padding:6px;font-size:12px;" onclick="resetWorker(${i})">Reset</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function markPresent(i) {
+      const workers = JSON.parse(localStorage.getItem('skyline_workers') || '[]');
+      workers[i].days += 1;
+      localStorage.setItem('skyline_workers', JSON.stringify(workers));
+      renderWorkers();
+    }
+
+    function addWorkerAdvance(i) {
+      const amt = parseFloat(prompt('કારીગરે લીધેલ ઉપાડ (Advance ₹) લખો:', '500'));
+      if (!isNaN(amt) && amt > 0) {
+        const workers = JSON.parse(localStorage.getItem('skyline_workers') || '[]');
+        workers[i].advance += amt;
+        localStorage.setItem('skyline_workers', JSON.stringify(workers));
+        renderWorkers();
+      }
+    }
+
+    function resetWorker(i) {
+      if (!confirm('આ કારીગરનો મહિનાનો હિસાબ ઝીરો કરવો છે?')) return;
+      const workers = JSON.parse(localStorage.getItem('skyline_workers') || '[]');
+      workers[i].days = 0;
+      workers[i].advance = 0;
+      localStorage.setItem('skyline_workers', JSON.stringify(workers));
+      renderWorkers();
+    }
+
+    // --- 2D DESIGN CANVAS ---
+    function draw2DDesign() {
+      const canvas = document.getElementById('designCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const style = document.getElementById('designStyle').value;
+      const roofCol = document.getElementById('roofColor').value;
+      const bays = parseInt(document.getElementById('bayCount').value) || 4;
+      const L = document.getElementById('lengthFt').value || 15;
+      const W = document.getElementById('widthFt').value || 15;
+      const H = document.getElementById('heightFt').value || 10;
+
+      if (style === 'gazebo_pyramid') {
+        document.getElementById('lhDrawingTitle').innerText = `પ્રપોઝ્ડ ગઝેબો 2D ડિઝાઈન (Designer Gazebo: ${L} Ft × ${W} Ft × ${H} Ft)`;
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillRect(150, 295, 460, 14);
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(150, 295, 460, 14);
+
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(245, 165, 11, 130);
+        ctx.fillRect(504, 165, 11, 130);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(195, 165, 15, 130);
+        ctx.fillRect(550, 165, 15, 130);
+
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(190, 160, 380, 10);
+        ctx.strokeStyle = '#b45309';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(210, 195); ctx.lineTo(240, 170);
+        ctx.moveTo(550, 195); ctx.lineTo(520, 170);
+        ctx.stroke();
+
+        ctx.fillStyle = roofCol;
+        ctx.beginPath();
+        ctx.moveTo(165, 162);
+        ctx.lineTo(380, 48);
+        ctx.lineTo(595, 162);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+        ctx.lineWidth = 1.5;
+        for (let y = 75; y < 155; y += 16) {
+          let ratio = (y - 48) / (162 - 48);
+          let halfW = ratio * 215;
+          ctx.beginPath();
+          ctx.moveTo(380 - halfW, y);
+          ctx.lineTo(380 + halfW, y);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = '#fef08a';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(380, 48); ctx.lineTo(255, 162);
+        ctx.moveTo(380, 48); ctx.lineTo(505, 162);
+        ctx.stroke();
+
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(380, 38, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillRect(378, 22, 4, 26);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.fillText(`Width: ${W} Ft`, 340, 332);
+        ctx.fillText(`Depth: ${L} Ft`, 575, 290);
+        ctx.fillText(`Column H: ${H} Ft`, 95, 235);
+        ctx.fillText(`SKYLINE GAZEBO (${L}×${W} Ft)`, 280, 18);
+
+      } else {
+        document.getElementById('lhDrawingTitle').innerText = `પ્રપોઝ્ડ આખા શેડની 2D ડિઝાઈન (Full Shed Layout: ${L} Ft L × ${W} Ft W × ${H} Ft H)`;
+
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(35, 295); ctx.lineTo(310, 295); ctx.stroke();
+
+        ctx.fillStyle = '#1e3a8a';
+        ctx.fillRect(65, 145, 12, 150);
+        ctx.fillRect(265, 145, 12, 150);
+
+        ctx.fillStyle = roofCol;
+        ctx.beginPath();
+        if (style === 'shed_gable') {
+          ctx.moveTo(50, 145); ctx.lineTo(171, 75); ctx.lineTo(292, 145);
+        } else {
+          ctx.moveTo(50, 115); ctx.lineTo(292, 155); ctx.lineTo(292, 163); ctx.lineTo(50, 123);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        if (style === 'shed_gable') {
+          ctx.beginPath();
+          ctx.moveTo(65, 145); ctx.lineTo(277, 145);
+          ctx.moveTo(171, 75); ctx.lineTo(171, 145);
+          ctx.moveTo(118, 110); ctx.lineTo(118, 145);
+          ctx.moveTo(224, 110); ctx.lineTo(224, 145);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText(`Front View (પહોળાઈ: ${W} Ft)`, 95, 320);
+        ctx.fillText(`H: ${H} Ft`, 15, 225);
+
+        const startX = 360, endX = 710;
+        const stepX = (endX - startX) / bays;
+
+        ctx.strokeStyle = '#475569';
+        ctx.beginPath(); ctx.moveTo(340, 295); ctx.lineTo(735, 295); ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        for (let i = 0; i <= bays; i++) {
+          let cx = startX + i * stepX + 25;
+          ctx.fillRect(cx, 123, 8, 150);
+        }
+
+        ctx.fillStyle = roofCol;
+        ctx.beginPath();
+        ctx.moveTo(startX - 10, 145);
+        ctx.lineTo(endX + 10, 145);
+        ctx.lineTo(endX + 35, 100);
+        ctx.lineTo(startX + 15, 100);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+        ctx.lineWidth = 1.5;
+        for (let p = 1; p <= 3; p++) {
+          let py = 145 - p * 11;
+          let pxOff = p * 6;
+          ctx.beginPath();
+          ctx.moveTo(startX - 10 + pxOff, py);
+          ctx.lineTo(endX + 10 + pxOff, py);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = '#1e3a8a';
+        for (let i = 0; i <= bays; i++) {
+          let cx = startX + i * stepX;
+          ctx.fillRect(cx, 145, 11, 150);
+        }
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText(`Full Shed Side Length View (લંબાઈ: ${L} Ft | ${bays + 1} Columns/Side)`, 380, 320);
+        ctx.fillText(`SKYLINE SHED / PEB (${L}×${W}×${H} Ft)`, 260, 22);
+      }
+
+      const imgData = canvas.toDataURL('image/png');
+      document.getElementById('lhDrawingImg').src = imgData;
+
+      document.getElementById('canvasSummary').innerHTML =
+        `<strong>Structure Spec:</strong> ${L} Ft (L) × ${W} Ft (W) × ${H} Ft (H) | <strong>Column:</strong> ${document.getElementById('colSize').value}`;
+    }
+  </script>
+</body>
+</html>
